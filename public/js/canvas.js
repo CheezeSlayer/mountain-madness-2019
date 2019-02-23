@@ -10,7 +10,11 @@ function setup() {
   cnv = createCanvas(800, 500);
   centerCanvas();
   background(220);
+<<<<<<< HEAD
   noLoop();
+=======
+  rect(10, 10, 200, 200);
+>>>>>>> 6777d4efa33967d6bfa70fa6387a6994c52e3807
 }
 
 function draw() {
