@@ -186,10 +186,18 @@ function drawRockColumns(col_begin, col_end)	// draw all columns
 		drawSingleColumn(col, USR_ROCK_COL_WIDTH, rock_col_heights[counter]);
 
 		//console.log("for range: " + col + " - " + (col + USR_ROCK_COL_WIDTH));
+
 		for(gcol = col; gcol < col + USR_ROCK_COL_WIDTH; gcol++)	// write heights to rock heights[]
 		{
 			//console.log("setting height at: " + gcol + " to: " + rock_col_heights[counter]);
-			rock_heights[gcol] = rock_col_heights[counter];
+			if(rock_col_heights[counter] < g_height)
+			{
+				rock_heights[gcol] = rock_col_heights[counter];
+			}
+			else
+			{
+				rock_heights[gcol] = g_height -1;	
+			}
 			//console.log("rock_heights[" + gcol + "] = " + rock_col_heights[counter]);
 		}
 		counter++;
@@ -212,12 +220,19 @@ function drawRockColumns(col_begin, col_end)	// draw all columns
 
 function recursiveRockSmoothLeft(x, h, w, step_size_left)
 {
-	
+
 	for(col = x; col < x + w; col++)	// write heights to rock heights[]
 	{
-		rock_heights[col] = h;
+		if(h < g_height)
+		{
+			rock_heights[col] = h;
+		}
+		else
+		{
+			rock_heights[col] = g_height -1;
+		}
 	}
-	
+
 
 	if(step_size_left <= 1 || w <= 1)
 	{
@@ -226,7 +241,12 @@ function recursiveRockSmoothLeft(x, h, w, step_size_left)
 	// create a rectangle that has a random size and is nestled into the corner
 	var new_chunk_height = floor(random(1, step_size_left));
 	var new_chunk_width = floor(random(1, w));
-	gRect(x, g_height - (h + new_chunk_height), new_chunk_width, new_chunk_height, 130, 14, 85);
+
+  var r, g, b;
+  r = round(random(90, 128));
+  g = round(random(90, 128));
+  b = round(random(90, 128));
+	gRect(x, g_height - (h + new_chunk_height), new_chunk_width, new_chunk_height, r, b, g);
 
 
 
@@ -240,7 +260,14 @@ function recursiveRockSmoothRight(x, h, w, step_size_right)
 {
 	for(col = x; col < x + w; col++)	// write heights to rock heights[]
 	{
-		rock_heights[col] = h;
+		if(h < g_height)
+		{
+			rock_heights[col] = h;
+		}
+		else
+		{
+			rock_heights[col] = g_height -1;
+		}
 	}
 
 	if(step_size_right <= 1 || w <= 1)
@@ -250,7 +277,12 @@ function recursiveRockSmoothRight(x, h, w, step_size_right)
 	// create a rectangle that has a random size and is nestled into the corner
 	var new_chunk_height = floor(random(1, step_size_right));
 	var new_chunk_width = floor(random(1, w));
-	gRect(x + (w - new_chunk_width), g_height - (h + new_chunk_height), new_chunk_width, new_chunk_height, 130, 14, 85);
+
+  var r, g, b;
+  r = round(random(90, 128));
+  g = round(random(90, 128));
+  b = round(random(90, 128));
+	gRect(x + (w - new_chunk_width), g_height - (h + new_chunk_height), new_chunk_width, new_chunk_height, r, b, g);
 
 	// recursive call for new rectangle in both new corners
 	recursiveRockSmoothRight(x + (w - new_chunk_width), h + new_chunk_height, new_chunk_width, step_size_right - new_chunk_height);
@@ -261,7 +293,11 @@ function recursiveRockSmoothRight(x, h, w, step_size_right)
 // !!! Merge back into drawRockColumns()???
 function drawSingleColumn(grid_x, col_width, col_height)	// draw a single column
 {
-	gRect(grid_x, g_height - col_height, col_width, col_height, 130, 14, 85);
+  var r, g, b;
+  r = round(random(90, 128));
+  g = round(random(90, 128));
+  b = round(random(90, 128));
+	gRect(grid_x, g_height - col_height, col_width, col_height, r, g, b);
 }
 
 function drawCloud(cloudNum, cloudH, cloudW) {
@@ -284,6 +320,10 @@ function drawCloud(cloudNum, cloudH, cloudW) {
     y_cloud = round(random(first_row, last_row));
     //console.log(last_col, last_row);
     //console.log(x_cloud, y_cloud);
+    /*var r , g , b;
+    r = round(random(204, 255));
+    g = round(random(204, 255));
+    b = round(random(204, 255));*/
     cloudArr[index] = gRect(x_cloud, y_cloud, cloudW, cloudH, 255, 255, 255);
   }
 
@@ -299,69 +339,23 @@ function generateTopsoil()
 {
 	for(num = 0; num < rock_heights.length; num++)
 	{
+    var r, g, b
 		//console.log("height " + rock_heights[num]);
-		console.log("generating topsoil at: " + num + ", " + rock_heights[num]);
-		gRect(num, g_height - rock_heights[num] + 1, 1, 3, 140, 64, 9);
-		gRect(num, g_height - rock_heights[num], 1, 1, 116, 198, 43);
-		//strokeWeight(10);
-		//stroke(0);
-		//line(num * PIXEL_TO_GRID_SCALE, (g_height - rock_heights[num]) * PIXEL_TO_GRID_SCALE, (num +1) * PIXEL_TO_GRID_SCALE, (g_height - rock_heights[num]) * PIXEL_TO_GRID_SCALE);
+		//console.log("generating topsoil at: " + num + ", " + rock_heights[num]);
+    r = round(random(102, 153));
+    g = round(random(51, 102));
+    b = round(random(0, 51));
+		gRect(num, g_height - rock_heights[num], 1, 3, r, g, b);
+
+    r = round(random(0, 102));
+    g = round(random(153, 255));
+    b = round(random(51, 102));
+		gRect(num, g_height - rock_heights[num] - 1, 1, 1, r, g, b);
+		//line(num * PIXEL_TO_GRID_SCALE, rock_heights[num], (num +1) * PIXEL_TO_GRID_SCALE, rock_heights[num]);
 	}
 }
 
 
-function generateForest()
-{
-	var MIN_FOREST_INTERVAL = 300;
-	var MAX_FOREST_INTERVAL = 500;
-
-	var forest_origins = [];
-	forest_origins[0] = round(random(0, MIN_FOREST_INTERVAL));
-
-
-	for(i = 0; i < forest_origins.length; i++)
-	{
-		gRect(forest_origins[i], rock_heights[i], 1, 10, 255, 255, 255);
-	}
-}
-
-
-function generateTree()
-{
-	var MIN_ROOT_LENGTH = 1;
-	var MAX_ROOT_LENGTH = 5;
-	var MAX_HEIGHT = 25;
-	var MIN_HEIGHT = 8;
-
-	var x_origin = 10;
-
-	var root_length_left = 5 //round(random(MIN_ROOT_LENGTH, MAX_ROOT_LENGTH));
-	var root_length_right = 5 //round(random(MIN_ROOT_LENGTH, MAX_ROOT_LENGTH));
-	console.log(root_length_left);
-
-	gRect(x_origin, g_height - rock_heights[x_origin], 1, 1, 0, 0, 0);	// origin pixel
-
-	var root_height = rock_heights[x_origin];
-	for(lr = 1; lr < root_length_left; lr++)	// lay left root in topsoil
-	{
-		gRect(x_origin - lr, g_height - root_height, 1, 1, 89, 53, 4);
-		if(random(1) > 0.5)
-		{
-			gRect(x_origin - lr, g_height - root_height + 1, 1, 1, 89, 53, 4);
-			root_height--;
-		}
-	}
-	root_height = rock_heights[x_origin];
-	for(rr = 1; rr < root_length_right; rr++)	// lay right root in topsoil
-	{
-		gRect(x_origin + rr, g_height - root_height, 1, 1, 89, 53, 4);
-		if(random(1) > 0.5)
-		{
-			gRect(x_origin + rr, g_height - root_height + 1, 1, 1, 89, 53, 4);
-			root_height--;
-		}
-	}
-}
 
 
 function generate() {
@@ -385,7 +379,6 @@ function generate() {
   drawCloud(USR_CLOUD_NUM, USR_CLOUD_HEIGHT, USR_CLOUD_WIDTH);
   drawRockColumns(0, g_width);
   generateTopsoil();
-  generateTree();
   drawGrid();
 }
 
@@ -411,13 +404,23 @@ function keyPressed() {
 
 function mouseWheel(event) {
 	PIXEL_TO_GRID_SCALE -= event.delta / 100;
-	console.log(event.delta);
+	if(event.delta > 0)
+	{
+		x_offset += PIXEL_TO_GRID_SCALE;
+		y_offset += PIXEL_TO_GRID_SCALE;
+	}
+	else
+	{
+		x_offset -= PIXEL_TO_GRID_SCALE;
+		y_offset -= PIXEL_TO_GRID_SCALE;
+	}
+	//console.log(event.delta);
 }
 
 
 function mouseDragged()
 {
-	if(mouseX > 0 && mouseX < width)
+	if(mouseX > 250 && mouseX < width)
 	{
 		if(mouseY > 0 && mouseY < height)
 		{
@@ -502,3 +505,130 @@ cloudMaxWOutput.innerHTML = cloudMaxWSlider.value;
 cloudMaxWSlider.oninput = function() {
   cloudMaxWOutput.innerHTML = this.value;
 }
+
+
+/*
+function generateAllTrees()
+{
+	var MIN_FOREST_INTERVAL = 100;
+	var MAX_FOREST_INTERVAL = 200;
+	var MIN_FOREST_SIZE = 50;
+	var MAX_FOREST_SIZE = 150;
+	var TREE_INTERVAL = 5;
+
+	var forest_origins = [];	// array of the origin points of each forest
+
+	{	// generate forest origins	
+		forest_number = 0;
+		forest_origins[forest_number] = round(random(0, MIN_FOREST_INTERVAL));
+		while(forest_origins[forest_number] < g_width)
+		{
+			forest_number++;
+			forest_origins[forest_number] = forest_origins[forest_number -1] + round(random(MIN_FOREST_INTERVAL, MAX_FOREST_INTERVAL));
+		}
+	}
+
+	for(i = 0; i < forest_origins.length; i++)	// For each forest
+	{
+		console.log("forest at: " + forest_origins[i]);
+		var forest_radius = round(random(MIN_FOREST_SIZE /2, MAX_FOREST_SIZE /2));
+		for(distance_from_origin = 1; distance_from_origin < forest_radius; distance_from_origin++)
+		{
+			if(random(1) < getGaussianTreeThreshold(80, 15, distance_from_origin))
+			{
+				distance_from_origin += TREE_INTERVAL;
+				if(forest_origins[i] + distance_from_origin < g_width)
+				{
+					generateTree(forest_origins[i] + distance_from_origin);
+				}
+				//console.log("new tree at: " + distance_from_origin);
+			}
+			if(random(1) < getGaussianTreeThreshold(80, 15, distance_from_origin))
+			{
+				distance_from_origin += TREE_INTERVAL;
+				if(forest_origins[i] - distance_from_origin > 0)
+				{
+					generateTree(forest_origins[i] - distance_from_origin);
+				}
+				//console.log("new tree at: " + distance_from_origin);
+			}
+		}
+	}
+}
+
+
+function getGaussianTreeThreshold(density, radius, column_rel_to_origin)
+{
+	return (density / 100) * pow(2, -pow(column_rel_to_origin, 2) / (2 * pow(radius, 2)));
+}
+
+
+function generateTree(x_origin)
+{
+	var MIN_ROOT_LENGTH = 1;
+	var MAX_ROOT_LENGTH = 5;
+	var MAX_TREE_HEIGHT = 25;
+	var MIN_TREE_HEIGHT = 8;
+	var MIN_TREE_WIDTH = 1;
+	var MAX_TREE_WIDTH = 1;
+
+	var tree_width = round(random(MIN_TREE_WIDTH, MAX_TREE_WIDTH));
+	var tree_height = round(random(MIN_TREE_HEIGHT, MAX_TREE_HEIGHT));
+
+	var root_length_left = 5 //round(random(MIN_ROOT_LENGTH, MAX_ROOT_LENGTH));
+	var root_length_right = 5 //round(random(MIN_ROOT_LENGTH, MAX_ROOT_LENGTH));
+	console.log(root_length_left);
+
+	gRect(x_origin, g_height - rock_heights[x_origin], 1, 1, 89, 53, 4);	// origin pixel
+	//console.log("tree_base_height[" + x_origin + "] = " + rock_heights[x_origin]);
+	var root_height = rock_heights[x_origin];
+	for(lr = 1; lr < root_length_left; lr++)	// lay left root in topsoil
+	{
+		gRect(x_origin - lr, g_height - root_height, 1, 1, 89, 53, 4);
+		if(random(1) > 0.5)
+		{
+			gRect(x_origin - lr, g_height - root_height + 1, 1, 1, 89, 53, 4);
+			root_height--;
+		}
+	}
+	root_height = rock_heights[x_origin];
+	for(rr = 1; rr < root_length_right; rr++)	// lay right root in topsoil
+	{
+		gRect(x_origin + rr, g_height - root_height, 1, 1, 89, 53, 4);
+		if(random(1) > 0.5)
+		{
+			gRect(x_origin + rr, g_height - root_height + 1, 1, 1, 89, 53, 4);
+			root_height--;
+		}
+	}
+
+	// generate trunk
+	var left = x_origin - floor(tree_width/2); 
+	gRect(left, g_height - rock_heights[left] - tree_height, tree_width, tree_height, 89, 53, 4);
+
+
+	// generate branches
+	for(distance_from_top = 0; distance_from_top < tree_height; distance_from_top++)
+	{
+		if(random(1) < getGaussianTreeThreshold(80, 2, distance_from_top))
+		{
+
+			generateTreeBranch(x_origin, tree_height - distance_from_top);
+		}
+	}
+}
+
+
+function generateTreeBranch(x_origin, height_of_branch_node)
+{
+	var tree_base_height = rock_heights[x_origin];
+	//if(is_on_left_side)
+	//{
+		//console.log("height_of_branch_node: " + height_of_branch_node);
+		console.log("tree_base_height: " + tree_base_height);
+		console.log("generating branch at: " + x_origin + " and " + (g_height - tree_base_height - height_of_branch_node));
+		gRect(x_origin, g_height - tree_base_height - height_of_branch_node, 1, 2, 89, 53, 4);
+	//}
+}
+
+*/
