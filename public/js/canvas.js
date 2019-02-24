@@ -50,19 +50,37 @@ function setup() {
 
 function initGrid()
 {
+  /*
 	var column = [];	// create a single column
+  var row = [];
 
-	for(var col = 0; col < INITIAL_GEN_HEIGHT / PIXEL_TO_GRID_SCALE; col++)	// init the single column
+	for(col = 0; col < INITIAL_GEN_HEIGHT / PIXEL_TO_GRID_SCALE; col++)	// init the single column
 	{
 		column[col] = USR_BG_COL * 10;
 	}
 
-	for(var row = 0; row <  INITIAL_GEN_WIDTH / PIXEL_TO_GRID_SCALE; row++)	// init the grid to a bunch of columns
+	for(row = 0; row <  INITIAL_GEN_WIDTH / PIXEL_TO_GRID_SCALE; row++)	// init the grid to a bunch of columns
 	{
 		grid[row] = column;
 	}
 	console.log("Col size: " + column.length);
 	console.log("Row size: " + grid.length);
+  */
+
+  var cols = INITIAL_GEN_HEIGHT / PIXEL_TO_GRID_SCALE;
+  var rows = INITIAL_GEN_WIDTH / PIXEL_TO_GRID_SCALE;
+
+  var colIndex = 0;
+  var rowIndex = 0;
+
+  for ( colIndex = 0; colIndex < cols; colIndex++ )
+  {
+    grid[colIndex] = [];
+    for ( rowIndex = 0; rowIndex < rows; rowIndex++ )
+    {
+      grid[colIndex][rowIndex] = USR_BG_COL*10;
+    }
+  }
 }
 
 function gRect(x, y, w, h, color) {
