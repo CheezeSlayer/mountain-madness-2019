@@ -50,6 +50,16 @@ function setup() {
 
 function initGrid()
 {
+	for(var row = 0; row <  INITIAL_GEN_WIDTH / PIXEL_TO_GRID_SCALE; row++)
+	{
+		for(var col = 0; col < INITIAL_GEN_HEIGHT / PIXEL_TO_GRID_SCALE; col++)
+		{
+			grid[row][col] = USR_BG_COL * 10;
+		}	
+	}
+
+
+	/*
 	var column = [];	// create a single column
 
 	for(var col = 0; col < INITIAL_GEN_HEIGHT / PIXEL_TO_GRID_SCALE; col++)	// init the single column
@@ -63,7 +73,9 @@ function initGrid()
 	}
 	console.log("Col size: " + column.length);
 	console.log("Row size: " + grid.length);
+	*/
 }
+
 
 function gRect(x, y, w, h, color) {
   for (var xindex = x; xindex < w; xindex++ )
@@ -147,7 +159,7 @@ function generate() {
   USR_BG_COL = document.getElementById("regenRange").value;
   initGrid();
   //gRect(0, 0, 1, 1, 255);
-  grid[2][2] = 255;
+  grid[2][0] = 255;
   drawGrid();
 }
 
