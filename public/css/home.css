@@ -1,0 +1,20 @@
+.sliderDiv {
+  width: 30%;
+  margin-left: 25px;
+  text-align: center;
+  border-style: solid;
+  border-radius: 1px;
+}
+
+.sliderDiv h1 {
+  margin-top: 20px;
+  font-size: 25px;
+}
+
+.sliderDiv input {
+  width: 450px;
+}
+
+.sliderDiv button {
+  margin-bottom: 20px;
+}

@@ -18,52 +18,54 @@
 <div id="navbar" class="text-center"></div>
 
 <body>
-
-  <div class="cloudDiv">
-    <h1>Clouds</h1>
-    <input type="range" min="0" max="20" value="10" class="cloudSlider" id="cloudRange">
-    <p>Value: <span id="cloudNumber"></span></p>
+<br>
+<br>
+<div class="sliderDiv">
+  <div class="regenDiv">
+    <h1>Regen Background</h1>
+    <input type="range" min="0" max="20" value="10" class="regenSlider" id="regenRange">
+    <p>Value: <span id="regenNumber"></span></p>
   </div>
 
-  <div class="mtnDiv">
-    <h1>Mountains</h1>
-    <input type="range" min="0" max="5" value="2" class="mtnSlider" id="mtnRange">
-    <p>Value: <span id="mtnNumber"></span></p>
+  <div class="param2Div">
+    <h1>Parameter#2</h1>
+    <input type="range" min="0" max="5" value="2" class="param2Slider" id="param2Range">
+    <p>Value: <span id="param2Number"></span></p>
   </div>
 
-  <div class="treeDiv">
-    <h1>Trees</h1>
-    <input type="range" min="0" max="50" value="10" class="treeSlider" id="treeRange">
-    <p>Value: <span id="treeNumber"></span></p>
+  <div class="param3Div">
+    <h1>Parameter#3</h1>
+    <input type="range" min="0" max="50" value="10" class="param3Slider" id="param3Range">
+    <p>Value: <span id="param3Number"></span></p>
   </div>
 
   <button id="submitbtn" onclick="generate()">Submit</button>
+
+</div>
 </body>
 </html>
 
 <script src="/js/canvas.js"></script>
 
 <script>
-var cloudSlider = document.getElementById("cloudRange");
-var cloudOutput = document.getElementById("cloudNumber");
-cloudOutput.innerHTML = cloudSlider.value;
-cloudSlider.oninput = function() {
-  cloudOutput.innerHTML = this.value;
+var regenSlider = document.getElementById("regenRange");
+var regenOutput = document.getElementById("regenNumber");
+regenOutput.innerHTML = regenSlider.value;
+regenSlider.oninput = function() {
+  regenOutput.innerHTML = this.value;
 }
 
-var mtnSlider = document.getElementById("mtnRange");
-var mtnOutput = document.getElementById("mtnNumber");
-mtnOutput.innerHTML = mtnSlider.value;
-mtnSlider.oninput = function() {
-  mtnOutput.innerHTML = this.value;
+var param2Slider = document.getElementById("param2Range");
+var param2Output = document.getElementById("param2Number");
+param2Output.innerHTML = param2Slider.value;
+param2Slider.oninput = function() {
+  param2Output.innerHTML = this.value;
 }
 
-var treeSlider = document.getElementById("treeRange");
-var treeOutput = document.getElementById("treeNumber");
-treeOutput.innerHTML = treeSlider.value;
+var param3Slider = document.getElementById("param3Range");
+var param3Output = document.getElementById("param3Number");
+param3Output.innerHTML = param3Slider.value;
 treeSlider.oninput = function() {
-  treeOutput.innerHTML = this.value;
+  param3Output.innerHTML = this.value;
 }
-
-
 </script>

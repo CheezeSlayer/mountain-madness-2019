@@ -5,7 +5,7 @@ var x = 0;
 var y = 400;
 
 function centerCanvas() {
-  var x = (windowWidth - width) / 2;
+  var x = (windowWidth - width) / 1.5;
   var y = (windowHeight - height) / 2;
   cnv.position(x, y);
 }
@@ -18,7 +18,7 @@ var USR_BG_COL;
 
 
 // List CONSTANT variables
-var PIXEL_TO_GRID_SCALE = 6;	// how many pixels wide is a grid pixel
+var PIXEL_TO_GRID_SCALE = 10;	// how many pixels wide is a grid pixel
 var BACKGROUND_COL = 10;
 
 // Other global variables
@@ -71,7 +71,7 @@ function drawGrid()
 }
 
 function generate() {
-  USR_BG_COL = document.getElementById("cloudRange").value;
+  USR_BG_COL = document.getElementById("regenRange").value;
   initGrid();
   drawGrid();
 }
