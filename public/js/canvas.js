@@ -25,6 +25,10 @@ var BACKGROUND_COL = 10;
 var grid = [];	// array of COLUMNS
 var x_offset = -100;
 var y_offset = 0;
+var first_col;	// first column to render
+var last_col;
+var first_row;	// first row to render
+var last_row;
 var INITIAL_GEN_WIDTH;
 var INITIAL_GEN_HEIGHT;
 
@@ -64,41 +68,13 @@ function initGrid()
 
 function drawGrid()
 {
-  background(220);
+ 	background(220);
 
 // FIND FIRST AND LAST COL TO RENDER & CHECK VALID
-  var first_col = floor( -(x_offset / PIXEL_TO_GRID_SCALE));
-  var last_col = first_col + floor(width / PIXEL_TO_GRID_SCALE);
-  if(first_col < 0){
-  	first_col = 0;
-  }
-  else if(first_col >= grid.length){
-  	first_col = grid.length;
-  }
-
-  if(last_col < 0){
-  	last_col = 0;
-  }
-  else if(last_col >= grid.length){
-  	last_col = grid.length;
-  }
+	calculateColumnsToRender();
 
 // FIND FIRST AND LAST ROW TO RENDER & CHECK VALID
-  var first_row = floor( -(y_offset / PIXEL_TO_GRID_SCALE));
-  var last_row = first_row + floor(height / PIXEL_TO_GRID_SCALE);
-  if(first_row < 0){
-  	first_row = 0;
-  }
-  else if(first_row >= grid[0].length){
-  	first_row = grid[0].length;
-  }
-
-  if(last_row < 0){
-  	last_row = 0;
-  }
-  else if(last_row >= grid[0].length){
-  	last_row = grid[0].length;
-  }
+  	calculateRowsToRender();
 
 // RENDER GRID
 	for(col = first_col; col < last_col; col++)
@@ -114,6 +90,45 @@ function drawGrid()
 			rect(xPos, yPos, PIXEL_TO_GRID_SCALE, PIXEL_TO_GRID_SCALE);
 			pop();
 		}
+	}
+}
+
+
+function calculateColumnsToRender()
+{
+	first_col = floor( -(x_offset / PIXEL_TO_GRID_SCALE));
+	last_col = first_col + floor(width / PIXEL_TO_GRID_SCALE);
+	if(first_col < 0){
+		first_col = 0;
+	}
+	else if(first_col >= grid.length){
+		first_col = grid.length;
+	}
+
+	if(last_col < 0){
+		last_col = 0;
+	}
+	else if(last_col >= grid.length){
+		last_col = grid.length;
+	}
+}
+
+function calculateRowsToRender()
+{
+	first_row = floor( -(y_offset / PIXEL_TO_GRID_SCALE));
+	last_row = first_row + floor(height / PIXEL_TO_GRID_SCALE);
+	if(first_row < 0){
+		first_row = 0;
+	}
+	else if(first_row >= grid[0].length){
+		first_row = grid[0].length;
+	}
+
+	if(last_row < 0){
+		last_row = 0;
+	}
+	else if(last_row >= grid[0].length){
+		last_row = grid[0].length;
 	}
 }
 
