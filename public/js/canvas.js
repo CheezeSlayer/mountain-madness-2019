@@ -5,7 +5,7 @@ var x = 0;
 var y = 400;
 
 function centerCanvas() {
-  var x = (windowWidth - width) / 2;
+  var x = (windowWidth - width) / 1.5;
   var y = (windowHeight - height) / 2;
   cnv.position(x, y);
 }
@@ -119,7 +119,7 @@ function drawGrid()
 
 
 function generate() {
-  USR_BG_COL = document.getElementById("cloudRange").value;
+  USR_BG_COL = document.getElementById("regenRange").value;
   initGrid();
   drawGrid();
 }
