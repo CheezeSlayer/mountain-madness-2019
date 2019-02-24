@@ -23,19 +23,19 @@
 <div class="sliderDiv">
   <div class="regenDiv">
     <h1>Regen Background</h1>
-    <input type="range" min="0" max="20" value="10" class="regenSlider" id="regenRange">
+    <input type="range" min="0" max="20" value="10" class="slider" id="regenRange">
     <p>Value: <span id="regenNumber"></span></p>
   </div>
 
   <div class="param2Div">
     <h1>Parameter#2</h1>
-    <input type="range" min="0" max="5" value="2" class="param2Slider" id="param2Range">
+    <input type="range" min="0" max="5" value="2" class="slider" id="param2Range">
     <p>Value: <span id="param2Number"></span></p>
   </div>
 
   <div class="param3Div">
     <h1>Parameter#3</h1>
-    <input type="range" min="0" max="50" value="10" class="param3Slider" id="param3Range">
+    <input type="range" min="0" max="50" value="10" class="slider" id="param3Range">
     <p>Value: <span id="param3Number"></span></p>
   </div>
 
@@ -65,7 +65,7 @@ param2Slider.oninput = function() {
 var param3Slider = document.getElementById("param3Range");
 var param3Output = document.getElementById("param3Number");
 param3Output.innerHTML = param3Slider.value;
-treeSlider.oninput = function() {
+param3Slider.oninput = function() {
   param3Output.innerHTML = this.value;
 }
 </script>
