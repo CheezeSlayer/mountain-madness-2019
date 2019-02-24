@@ -351,6 +351,38 @@ function generateTopsoil()
     g = round(random(153, 255));
     b = round(random(51, 102));
 		gRect(num, g_height - rock_heights[num] - 1, 1, 1, r, g, b);
+
+    var random_boolean = Math.random() > 0.8;
+
+    var treeGrowChance = 0.5;
+    var treeGrow = Math.random() > treeGrowChance;
+    treeHeight = g_height - rock_heights[num] - 4
+
+    var treeGreenChance = 0.4;
+    var treeGreen = Math.random() > treeGreenChance;
+
+    if ( random_boolean == true )
+    {
+      gRect(num, treeHeight, 1, 4, 102, 51, 0);
+      while(treeGrow == true) {
+        treeHeight = treeHeight - 1;
+        gRect(num, treeHeight, 1, 4, 102, 51, 0);
+        treeGrowChance = treeGrowChance + 0.1;
+        treeGrow = Math.random() >treeGrowChance;
+      }
+      treeHeight = treeHeight - 1;
+      gRect(num-1, treeHeight, 3, 3, 0, 102, 0);
+
+      while(treeGreen == true ) {
+        treeHeight = treeHeight - 1;
+        gRect(num-1, treeHeight, 3, 3, 0, 102, 0);
+        treeGreenChance = treeGreenChance + 0.1;
+        treeGreen = Math.random() > treeGreenChance;
+      }
+      treeHeight = treeHeight - 1;
+      gRect(num, treeHeight, 1, 1, 0, 102, 0);
+    }
+
 		//line(num * PIXEL_TO_GRID_SCALE, rock_heights[num], (num +1) * PIXEL_TO_GRID_SCALE, rock_heights[num]);
 	}
 }
