@@ -24,7 +24,7 @@ var USR_CLOUD_HEIGHT;
 var USR_CLOUD_WIDTH;
 var USR_CLOUD_SPACING;
 // List CONSTANT variables
-var PIXEL_TO_GRID_SCALE = 15;	// how many pixels wide is a grid pixel
+var PIXEL_TO_GRID_SCALE = 5;	// how many pixels wide is a grid pixel
 var BACKGROUND_COL = 10;
 
 // Other global variables
@@ -274,7 +274,7 @@ function generate() {
 // GRAB USER INPUT
   USR_ROCK_COL_WIDTH = 10;
   USR_SIN_AMP = 20;
-  USR_SIN_FREQ = 100;
+  USR_SIN_FREQ = 5;
   USR_SIN_DEVIATION = 1;
   USR_MTN_HEIGHT = 60;
 
