@@ -18,12 +18,17 @@ var USR_BG_COL;
 
 
 // List CONSTANT variables
-var PIXEL_TO_GRID_SCALE = 6;	// how many pixels wide is a grid pixel
+var PIXEL_TO_GRID_SCALE = 15;	// how many pixels wide is a grid pixel
 var BACKGROUND_COL = 10;
 
 // Other global variables
-var grid = [];
-var x_offset = 0;
+var grid = [];	// array of COLUMNS
+var x_offset = -100;
+var y_offset = 0;
+var INITIAL_GEN_WIDTH;
+var INITIAL_GEN_HEIGHT;
+
+// Canvas width and height
 
 
 /* ### FUNCTIONS ### */
@@ -31,44 +36,87 @@ var x_offset = 0;
 function setup() {
   cnv = createCanvas(800, 500);
   centerCanvas();
+  INITIAL_GEN_WIDTH = width * 4;
+  INITIAL_GEN_HEIGHT = height * 2;
   background(220);
   generate();
 }
 
+
+
 function initGrid()
 {
-	var column = [];
+	var column = [];	// create a single column
 
-	for(row = 0; row < width / PIXEL_TO_GRID_SCALE; row++)
+	for(col = 0; col < INITIAL_GEN_HEIGHT / PIXEL_TO_GRID_SCALE; col++)	// init the single column
 	{
-		column[row] = USR_BG_COL * 10;
+		column[col] = USR_BG_COL * 10;
 	}
 
-	for(col = 0; col <  height / PIXEL_TO_GRID_SCALE; col++)
+	for(row = 0; row <  INITIAL_GEN_WIDTH / PIXEL_TO_GRID_SCALE; row++)	// init the grid to a bunch of columns
 	{
-		grid[col] = column;
+		grid[row] = column;
 	}
+	console.log("Col size: " + column.length);
+	console.log("Row size: " + grid.length);
 }
 
 
 function drawGrid()
 {
   background(220);
-	for(col = 0; col < height / PIXEL_TO_GRID_SCALE; col++)
+
+// FIND FIRST AND LAST COL TO RENDER & CHECK VALID
+  var first_col = floor( -(x_offset / PIXEL_TO_GRID_SCALE));
+  var last_col = first_col + floor(width / PIXEL_TO_GRID_SCALE);
+  if(first_col < 0){
+  	first_col = 0;
+  }
+  else if(first_col >= grid.length){
+  	first_col = grid.length;
+  }
+
+  if(last_col < 0){
+  	last_col = 0;
+  }
+  else if(last_col >= grid.length){
+  	last_col = grid.length;
+  }
+
+// FIND FIRST AND LAST ROW TO RENDER & CHECK VALID
+  var first_row = floor( -(y_offset / PIXEL_TO_GRID_SCALE));
+  var last_row = first_row + floor(height / PIXEL_TO_GRID_SCALE);
+  if(first_row < 0){
+  	first_row = 0;
+  }
+  else if(first_row >= grid[0].length){
+  	first_row = grid[0].length;
+  }
+
+  if(last_row < 0){
+  	last_row = 0;
+  }
+  else if(last_row >= grid[0].length){
+  	last_row = grid[0].length;
+  }
+
+// RENDER GRID
+	for(col = first_col; col < last_col; col++)
 	{
-		for(row = 0; row < width / PIXEL_TO_GRID_SCALE; row++)
+		for(row = first_row; row < last_row; row++)
 		{
-			var xPos = row * PIXEL_TO_GRID_SCALE + x_offset;
-			var yPos = col * PIXEL_TO_GRID_SCALE;
+			var xPos = col * PIXEL_TO_GRID_SCALE + x_offset;
+			var yPos = row * PIXEL_TO_GRID_SCALE + y_offset;
 			push();
 			stroke(100);
 			strokeWeight(1);
-			fill(grid[col][row]);
+			fill(grid[col][row]);	// take the color from the grid at that point
 			rect(xPos, yPos, PIXEL_TO_GRID_SCALE, PIXEL_TO_GRID_SCALE);
 			pop();
 		}
 	}
 }
+
 
 function generate() {
   USR_BG_COL = document.getElementById("cloudRange").value;
@@ -76,19 +124,38 @@ function generate() {
   drawGrid();
 }
 
+
 function keyPressed() {
   if (keyCode === LEFT_ARROW) {
     x_offset -= PIXEL_TO_GRID_SCALE;
     console.log(x_offset);
-    drawGrid();
   } else if (keyCode === RIGHT_ARROW) {
     x_offset += PIXEL_TO_GRID_SCALE;
     console.log(x_offset);
-    drawGrid();
+  }
+
+  if(key == 'a')
+  {
+  	console.log("x_offset: " + x_offset);
+  	console.log("y_offset: "  + y_offset);
   }
 }
 
+
+function mouseDragged()
+{
+	if(mouseX > 0 && mouseX < width)
+	{
+		if(mouseY > 0 && mouseY < height)
+		{
+			x_offset += (mouseX - pmouseX);
+			y_offset += (mouseY - pmouseY);
+		}
+	}
+}
+
+
 function draw()
 {
-	//empty
+	drawGrid();
 }
