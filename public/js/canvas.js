@@ -130,6 +130,7 @@ function calculateRowsToRender()
 	else if(last_row >= grid[0].length){
 		last_row = grid[0].length;
 	}
+	//COMMENT
 }
 
 
