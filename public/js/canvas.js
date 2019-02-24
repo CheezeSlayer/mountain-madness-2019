@@ -14,9 +14,11 @@ function centerCanvas() {
 
 
 // List user input variables in caps below
-var USR_BG_COL;
 var USR_ROCK_COL_WIDTH;
-
+var USR_SIN_AMP;
+var USR_SIN_FREQ;
+var USR_SIN_DEVIATION;
+var USR_MTN_HEIGHT;
 
 // List CONSTANT variables
 var PIXEL_TO_GRID_SCALE = 15;	// how many pixels wide is a grid pixel
@@ -44,7 +46,7 @@ function setup() {
   cnv = createCanvas(800, 500);
   centerCanvas();
   INITIAL_GEN_WIDTH = width * 1;
-  INITIAL_GEN_HEIGHT = height * 1;
+  INITIAL_GEN_HEIGHT = height * 3;
   background(220);
   generate();
 }
@@ -64,7 +66,7 @@ function initGrid()
     grid[colIndex] = [];
     for ( rowIndex = 0; rowIndex < rows; rowIndex++ )
     {
-      grid[colIndex][rowIndex] = USR_BG_COL*10;
+      grid[colIndex][rowIndex] = color(0, 0, 0);
     }
   }
 
@@ -73,7 +75,7 @@ function initGrid()
 }
 
 
-function gRect(x, y, w, h, color) {
+function gRect(x, y, w, h, r, g, b) {
 
 	var rounded_x = round(x);
 	var rounded_y = round(y);
@@ -86,7 +88,7 @@ function gRect(x, y, w, h, color) {
 		{
 			if(xindex < g_width && yindex < g_height)
 			{
-		  		grid[xindex][yindex] = color;
+		  		grid[xindex][yindex] = color(r, g, b);
 			}
 		}
 	}
@@ -111,7 +113,7 @@ function drawGrid()
 			var yPos = row * PIXEL_TO_GRID_SCALE + y_offset;
 			push();
 			stroke(100);
-			strokeWeight(1);
+			strokeWeight(0);
 			fill(grid[col][row]);	// take the color from the grid at that point
 			rect(xPos, yPos, PIXEL_TO_GRID_SCALE, PIXEL_TO_GRID_SCALE);
 			pop();
@@ -162,19 +164,25 @@ function calculateRowsToRender()
 
 /* ##### GENERATION FUNCTIONS ##### */
 
+function drawSky()
+{
+	gRect(0, 0, g_width, g_height, 132, 198, 237);
+}
+
 
 function drawRockColumns(col_begin, col_end)	// draw all columns
 {
 	for(var col = col_begin; col < col_end; col += USR_ROCK_COL_WIDTH)
 	{
-		drawSingleColumn(col, USR_ROCK_COL_WIDTH, random(g_height/2, g_height));
+		var random_offset = 1 + random(-USR_SIN_DEVIATION, USR_SIN_DEVIATION);
+		drawSingleColumn(col, USR_ROCK_COL_WIDTH, random_offset * (USR_MTN_HEIGHT + (USR_SIN_AMP * sin(col / USR_SIN_FREQ))));
 	}
 }
 
 
 function drawSingleColumn(grid_x, col_width, col_height)	// draw a single column
 {
-	gRect(grid_x, g_height - col_height, col_width, col_height, 255);
+	gRect(grid_x, g_height - col_height, col_width, col_height, 130, 14, 85);
 	//draw_small_rock(h, pos, pos+w, w * 0.1, w);
 }
 
@@ -183,11 +191,15 @@ function drawSingleColumn(grid_x, col_width, col_height)	// draw a single column
 
 function generate() {
 // GRAB USER INPUT
-  USR_BG_COL = document.getElementById("regenRange").value;
-  USR_ROCK_COL_WIDTH = document.getElementById("param2Range").value;
+  USR_ROCK_COL_WIDTH = 5;
+  USR_SIN_AMP = 20;
+  USR_SIN_FREQ = 10;
+  USR_SIN_DEVIATION = 0.01;
+  USR_MTN_HEIGHT = 50;
 
 // Create and draw grid
   initGrid();
+  drawSky();
   drawRockColumns(0, g_width);
   drawGrid();
 }
