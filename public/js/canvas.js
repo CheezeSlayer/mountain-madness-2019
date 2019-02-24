@@ -319,7 +319,7 @@ function generateTopsoil()
 	{
     var r, g, b
 		//console.log("height " + rock_heights[num]);
-		console.log("generating topsoil at: " + num + ", " + rock_heights[num]);
+		//console.log("generating topsoil at: " + num + ", " + rock_heights[num]);
     r = round(random(102, 153));
     g = round(random(51, 102));
     b = round(random(0, 51));
@@ -349,16 +349,21 @@ function generateTopsoil()
         treeGrow = Math.random() >treeGrowChance;
       }
       treeHeight = treeHeight - 1;
-      gRect(num-1, treeHeight, 3, 3, 0, 102, 0);
+      console.log(num);
 
-      while(treeGreen == true ) {
-        treeHeight = treeHeight - 1;
+      if ( num - 1 > 0 ) {
         gRect(num-1, treeHeight, 3, 3, 0, 102, 0);
-        treeGreenChance = treeGreenChance + 0.1;
-        treeGreen = Math.random() > treeGreenChance;
+
+        while(treeGreen == true ) {
+          treeHeight = treeHeight - 1;
+          gRect(num-1, treeHeight, 3, 3, 0, 102, 0);
+          treeGreenChance = treeGreenChance + 0.1;
+          treeGreen = Math.random() > treeGreenChance;
+        }
+        treeHeight = treeHeight - 1;
+        gRect(num, treeHeight, 1, 1, 0, 102, 0);
       }
-      treeHeight = treeHeight - 1;
-      gRect(num, treeHeight, 1, 1, 0, 102, 0);
+
     }
 
 		//line(num * PIXEL_TO_GRID_SCALE, rock_heights[num], (num +1) * PIXEL_TO_GRID_SCALE, rock_heights[num]);
