@@ -45,7 +45,7 @@ var INITIAL_GEN_HEIGHT;
 function setup() {
   cnv = createCanvas(800, 500);
   centerCanvas();
-  INITIAL_GEN_WIDTH = width * 1;
+  INITIAL_GEN_WIDTH = width * 10;
   INITIAL_GEN_HEIGHT = height * 3;
   background(220);
   generate();
@@ -172,18 +172,69 @@ function drawSky()
 
 function drawRockColumns(col_begin, col_end)	// draw all columns
 {
-	for(var col = col_begin; col < col_end; col += USR_ROCK_COL_WIDTH)
+	var counter = 0;
+	var rock_col_heights = [];
+	for(var col = 0; col < col_end; col += USR_ROCK_COL_WIDTH)
 	{
-		var random_offset = 1 + random(-USR_SIN_DEVIATION, USR_SIN_DEVIATION);
-		drawSingleColumn(col, USR_ROCK_COL_WIDTH, random_offset * (USR_MTN_HEIGHT + (USR_SIN_AMP * sin(col / USR_SIN_FREQ))));
+		var random_offset = round(random(-USR_SIN_DEVIATION, USR_SIN_DEVIATION));
+		rock_col_heights[counter] = random_offset + (USR_MTN_HEIGHT + round(USR_SIN_AMP * sin(col / USR_SIN_FREQ)));
+		drawSingleColumn(col, USR_ROCK_COL_WIDTH, rock_col_heights[counter]);
+		counter++;
+	}
+	
+
+	for(var col = 1; col < rock_col_heights.length; col++)
+	{
+		if(rock_col_heights[col -1] > rock_col_heights[col])
+		{
+			recursiveRockSmoothLeft(col * USR_ROCK_COL_WIDTH, rock_col_heights[col], USR_ROCK_COL_WIDTH, rock_col_heights[col -1] - rock_col_heights[col]);
+		}
+		if(rock_col_heights[col -1] < rock_col_heights[col])
+		{
+			recursiveRockSmoothRight((col -1) * USR_ROCK_COL_WIDTH, rock_col_heights[col -1], USR_ROCK_COL_WIDTH, rock_col_heights[col] - rock_col_heights[col -1]);
+		}
 	}
 }
 
 
+function recursiveRockSmoothLeft(x, h, w, step_size_left)
+{
+	if(step_size_left <= 1 || w <= 1)
+	{
+		return;	// finished if step is acceptable (goes down, or go up by only one)
+	}
+	// create a rectangle that has a random size and is nestled into the corner
+	var new_chunk_height = floor(random(1, step_size_left));
+	var new_chunk_width = floor(random(1, w));
+	gRect(x, g_height - (h + new_chunk_height), new_chunk_width, new_chunk_height, 130, 14, 85);
+
+	// recursive call for new rectangle in both new corners
+	recursiveRockSmoothLeft(x, h + new_chunk_height, new_chunk_width, step_size_left - new_chunk_height);
+	recursiveRockSmoothLeft(x + new_chunk_width, h, w - new_chunk_width, new_chunk_height);
+}
+
+
+function recursiveRockSmoothRight(x, h, w, step_size_right)
+{
+	if(step_size_right <= 1 || w <= 1)
+	{
+		return;	// finished if step is acceptable (goes down, or go up by only one)
+	}
+	// create a rectangle that has a random size and is nestled into the corner
+	var new_chunk_height = floor(random(1, step_size_right));
+	var new_chunk_width = floor(random(1, w));
+	gRect(x + (w - new_chunk_width), g_height - (h + new_chunk_height), new_chunk_width, new_chunk_height, 130, 14, 85);
+
+	// recursive call for new rectangle in both new corners
+	recursiveRockSmoothRight(x + (w - new_chunk_width), h + new_chunk_height, new_chunk_width, step_size_right - new_chunk_height);
+	recursiveRockSmoothRight(x, h, w - new_chunk_width, new_chunk_height);
+}
+
+
+// !!! Merge back into drawRockColumns()???
 function drawSingleColumn(grid_x, col_width, col_height)	// draw a single column
 {
 	gRect(grid_x, g_height - col_height, col_width, col_height, 130, 14, 85);
-	//draw_small_rock(h, pos, pos+w, w * 0.1, w);
 }
 
 
@@ -191,11 +242,11 @@ function drawSingleColumn(grid_x, col_width, col_height)	// draw a single column
 
 function generate() {
 // GRAB USER INPUT
-  USR_ROCK_COL_WIDTH = 5;
+  USR_ROCK_COL_WIDTH = 10;
   USR_SIN_AMP = 20;
-  USR_SIN_FREQ = 10;
-  USR_SIN_DEVIATION = 0.01;
-  USR_MTN_HEIGHT = 50;
+  USR_SIN_FREQ = 100;
+  USR_SIN_DEVIATION = 1;
+  USR_MTN_HEIGHT = 60;
 
 // Create and draw grid
   initGrid();
