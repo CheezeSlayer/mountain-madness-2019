@@ -20,8 +20,50 @@
 
 <body>
 
+  <div class="cloudDiv">
+    <h1>Clouds</h1>
+    <input type="range" min="0" max="20" value="10" class="cloudSlider" id="cloudRange">
+    <p>Value: <span id="cloudNumber"></span></p>
+  </div>
 
+  <div class="mtnDiv">
+    <h1>Mountains</h1>
+    <input type="range" min="0" max="5" value="2" class="mtnSlider" id="mtnRange">
+    <p>Value: <span id="mtnNumber"></span></p>
+  </div>
+
+  <div class="treeDiv">
+    <h1>Trees</h1>
+    <input type="range" min="0" max="50" value="10" class="treeSlider" id="treeRange">
+    <p>Value: <span id="treeNumber"></span></p>
+  </div>
+
+  <button id="submitbtn" onclick="">Submit</button>
 </body>
 </html>
 
 <script src="/js/canvas.js"></script>
+<script src="/js/clouds.js"></script>
+
+<script>
+var cloudSlider = document.getElementById("cloudRange");
+var cloudOutput = document.getElementById("cloudNumber");
+cloudOutput.innerHTML = cloudSlider.value;
+cloudSlider.oninput = function() {
+  cloudOutput.innerHTML = this.value;
+}
+
+var mtnSlider = document.getElementById("mtnRange");
+var mtnOutput = document.getElementById("mtnNumber");
+mtnOutput.innerHTML = mtnSlider.value;
+mtnSlider.oninput = function() {
+  mtnOutput.innerHTML = this.value;
+}
+
+var treeSlider = document.getElementById("treeRange");
+var treeOutput = document.getElementById("treeNumber");
+treeOutput.innerHTML = treeSlider.value;
+treeSlider.oninput = function() {
+  treeOutput.innerHTML = this.value;
+}
+</script>
