@@ -1,8 +1,7 @@
 
 var cnv;
 
-var cnv_x = 0;
-var cnv_y = 400;
+
 
 function centerCanvas() {
   var cnv_x = (windowWidth - width) / 1.5;
@@ -20,6 +19,10 @@ var USR_SIN_FREQ;
 var USR_SIN_DEVIATION;
 var USR_MTN_HEIGHT;
 
+var USR_CLOUD_NUM;
+var USR_CLOUD_HEIGHT;
+var USR_CLOUD_WIDTH;
+var USR_CLOUD_SPACING;
 // List CONSTANT variables
 var PIXEL_TO_GRID_SCALE = 15;	// how many pixels wide is a grid pixel
 var BACKGROUND_COL = 10;
@@ -28,7 +31,7 @@ var BACKGROUND_COL = 10;
 var grid = [];	// array of COLUMNS
 var g_width;
 var g_height;
-var x_offset = -100;
+var x_offset = 0;
 var y_offset = 0;
 var first_col;	// first column to render
 var last_col;
@@ -43,7 +46,7 @@ var INITIAL_GEN_HEIGHT;
 /* ### FUNCTIONS ### */
 
 function setup() {
-  cnv = createCanvas(800, 500);
+  cnv = createCanvas(windowWidth, windowHeight);
   centerCanvas();
   INITIAL_GEN_WIDTH = width * 1;
   INITIAL_GEN_HEIGHT = height * 3;
@@ -186,21 +189,55 @@ function drawSingleColumn(grid_x, col_width, col_height)	// draw a single column
 	//draw_small_rock(h, pos, pos+w, w * 0.1, w);
 }
 
+function drawCloud(cloudNum, cloudH, cloudW) {
+  cloudNum = USR_CLOUD_NUM;
+  cloudH = USR_CLOUD_HEIGHT;
+  cloudW = USR_CLOUD_WIDTH;
+  first_col = 0;
+  first_row = 0;
+  last_col = g_width;
+  last_row = g_height/2;
+  x_cloud = 0;
+  y_cloud = 0;
 
+  var cloudArr = [];
+  for( var index = 0; index < cloudNum; index++ )
+  {
+    cloudH = round(random(0, USR_CLOUD_HEIGHT));
+    cloudW = round(random(0, USR_CLOUD_WIDTH));
+    x_cloud = round(random(first_col, last_col));
+    y_cloud = round(random(first_row, last_row));
+    console.log(last_col, last_row);
+    console.log(x_cloud, y_cloud);
+    cloudArr[index] = gRect(x_cloud, y_cloud, cloudW, cloudH, 255, 255, 255);
+  }
+
+  for ( var index = 0; index < cloudNum; index++ )
+  {
+    cloudArr[index] += 0.2;
+  }
+}
 
 
 function generate() {
 // GRAB USER INPUT
-  USR_ROCK_COL_WIDTH = 5;
-  USR_SIN_AMP = 20;
-  USR_SIN_FREQ = 10;
+  USR_ROCK_COL_WIDTH = document.getElementById("rockColWidthRange").valueAsNumber;
+  USR_SIN_AMP = document.getElementById("sinAmpRange").valueAsNumber;
+  USR_SIN_FREQ = document.getElementById("sinFreqRange").valueAsNumber;
   USR_SIN_DEVIATION = 0.01;
   USR_MTN_HEIGHT = 50;
+  USR_CLOUD_NUM = 5;
+  USR_CLOUD_HEIGHT = 5;
+  USR_CLOUD_WIDTH = 8;
+  USR_CLOUD_MAXH = g_height/2;
+  USR_CLOUD_MAXW = g_width;
+
 
 // Create and draw grid
   initGrid();
   drawSky();
   drawRockColumns(0, g_width);
+  drawCloud(USR_CLOUD_NUM, USR_CLOUD_HEIGHT, USR_CLOUD_WIDTH);
   drawGrid();
 }
 
@@ -240,4 +277,25 @@ function mouseDragged()
 function draw()
 {
 	drawGrid();
+}
+
+var rockColWidthSlider = document.getElementById("rockColWidthRange");
+var rockColWidthOutput = document.getElementById("rockColWidthNumber");
+rockColWidthOutput.innerHTML = rockColWidthSlider.value;
+rockColWidthSlider.oninput = function() {
+  rockColWidthOutput.innerHTML = this.value;
+}
+
+var sinAmpSlider = document.getElementById("sinAmpRange");
+var sinAmpOutput = document.getElementById("sinAmpNumber");
+sinAmpOutput.innerHTML = sinAmpSlider.value;
+sinAmpSlider.oninput = function() {
+  sinAmpOutput.innerHTML = this.value;
+}
+
+var sinFreqSlider = document.getElementById("sinFreqRange");
+var sinFreqOutput = document.getElementById("sinFreqNumber");
+sinFreqOutput.innerHTML = sinFreqSlider.value;
+sinFreqSlider.oninput = function() {
+  sinFreqOutput.innerHTML = this.value;
 }

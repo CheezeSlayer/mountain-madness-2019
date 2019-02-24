@@ -4,6 +4,8 @@
   text-align: center;
   border-style: solid;
   border-radius: 1px;
+  z-index: 1000px;
+  position: fixed;
 }
 
 .sliderDiv h1 {
