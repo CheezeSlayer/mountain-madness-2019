@@ -15,6 +15,7 @@ function centerCanvas() {
 
 // List user input variables in caps below
 var USR_BG_COL;
+var USR_ROCK_COL_WIDTH;
 
 
 // List CONSTANT variables
@@ -23,6 +24,8 @@ var BACKGROUND_COL = 10;
 
 // Other global variables
 var grid = [];	// array of COLUMNS
+var g_width;
+var g_height;
 var x_offset = -100;
 var y_offset = 0;
 var first_col;	// first column to render
@@ -50,8 +53,8 @@ function setup() {
 
 function initGrid()
 {
-  var cols = INITIAL_GEN_WIDTH / PIXEL_TO_GRID_SCALE;
-  var rows = INITIAL_GEN_HEIGHT / PIXEL_TO_GRID_SCALE;
+  var cols = floor(INITIAL_GEN_WIDTH / PIXEL_TO_GRID_SCALE);
+  var rows = floor(INITIAL_GEN_HEIGHT / PIXEL_TO_GRID_SCALE);
 
   var colIndex = 0;
   var rowIndex = 0;
@@ -64,20 +67,29 @@ function initGrid()
       grid[colIndex][rowIndex] = USR_BG_COL*10;
     }
   }
+
+  g_width = cols;
+  g_height = rows;
 }
 
 
 function gRect(x, y, w, h, color) {
-  for (var xindex = x; xindex < x + w; xindex++ )
-  {
-  	
-    for(var yindex = y; yindex < y + h; yindex++ )
-    {
-    	console.log("gRect: xindex: " + x);
-  	console.log("gRect: yindex: " + y);
-      grid[xindex][yindex] = color;
-    }
-  }
+
+	var rounded_x = round(x);
+	var rounded_y = round(y);
+	var rounded_w = round(w);
+	var rounded_h = round(h);
+
+	for (var xindex = rounded_x; xindex < rounded_x + rounded_w; xindex++ )
+	{
+		for(var yindex = rounded_y; yindex < rounded_y + rounded_h; yindex++ )
+		{
+			if(xindex < g_width && yindex < g_height)
+			{
+		  		grid[xindex][yindex] = color;
+			}
+		}
+	}
 }
 
 function drawGrid()
@@ -144,14 +156,39 @@ function calculateRowsToRender()
 	else if(last_row >= grid[0].length){
 		last_row = grid[0].length;
 	}
-	//COMMENT
 }
 
 
+
+/* ##### GENERATION FUNCTIONS ##### */
+
+
+function drawRockColumns(col_begin, col_end)	// draw all columns
+{
+	for(var col = col_begin; col < col_end; col += USR_ROCK_COL_WIDTH)
+	{
+		drawSingleColumn(col, USR_ROCK_COL_WIDTH, random(g_height/2, g_height));
+	}
+}
+
+
+function drawSingleColumn(grid_x, col_width, col_height)	// draw a single column
+{
+	gRect(grid_x, g_height - col_height, col_width, col_height, 255);
+	//draw_small_rock(h, pos, pos+w, w * 0.1, w);
+}
+
+
+
+
 function generate() {
+// GRAB USER INPUT
   USR_BG_COL = document.getElementById("regenRange").value;
+  USR_ROCK_COL_WIDTH = document.getElementById("param2Range").value;
+
+// Create and draw grid
   initGrid();
-  gRect(4, 4, 1, 1, 255);
+  drawRockColumns(0, g_width);
   drawGrid();
 }
 
@@ -169,6 +206,8 @@ function keyPressed() {
   {
   	console.log("x_offset: " + x_offset);
   	console.log("y_offset: "  + y_offset);
+  	console.log("g_width: " + g_width);
+  	console.log("g_height: "  + g_height);
   }
 }
 
