@@ -30,6 +30,7 @@ var BACKGROUND_COL = 10;
 
 // Other global variables
 var grid = [];	// array of COLUMNS
+var rock_heights = [];	// array of heights of ground level at every grid pixel
 var g_width;
 var g_height;
 var x_offset = 0;
@@ -121,6 +122,8 @@ function drawGrid()
 			rect(xPos, yPos, PIXEL_TO_GRID_SCALE, PIXEL_TO_GRID_SCALE);
 		}
 	}
+
+
 }
 
 
@@ -181,6 +184,14 @@ function drawRockColumns(col_begin, col_end)	// draw all columns
 		var random_offset = round(random(-USR_SIN_DEVIATION, USR_SIN_DEVIATION));
 		rock_col_heights[counter] = random_offset + (USR_MTN_HEIGHT + round(USR_SIN_AMP * sin(col / USR_SIN_FREQ)));
 		drawSingleColumn(col, USR_ROCK_COL_WIDTH, rock_col_heights[counter]);
+
+		//console.log("for range: " + col + " - " + (col + USR_ROCK_COL_WIDTH));
+		for(gcol = col; gcol < col + USR_ROCK_COL_WIDTH; gcol++)	// write heights to rock heights[]
+		{
+			//console.log("setting height at: " + gcol + " to: " + rock_col_heights[counter]);
+			rock_heights[gcol] = rock_col_heights[counter];
+			//console.log("rock_heights[" + gcol + "] = " + rock_col_heights[counter]);
+		}
 		counter++;
 	}
 
@@ -201,6 +212,13 @@ function drawRockColumns(col_begin, col_end)	// draw all columns
 
 function recursiveRockSmoothLeft(x, h, w, step_size_left)
 {
+	
+	for(col = x; col < x + w; col++)	// write heights to rock heights[]
+	{
+		rock_heights[col] = h;
+	}
+	
+
 	if(step_size_left <= 1 || w <= 1)
 	{
 		return;	// finished if step is acceptable (goes down, or go up by only one)
@@ -210,6 +228,8 @@ function recursiveRockSmoothLeft(x, h, w, step_size_left)
 	var new_chunk_width = floor(random(1, w));
 	gRect(x, g_height - (h + new_chunk_height), new_chunk_width, new_chunk_height, 130, 14, 85);
 
+
+
 	// recursive call for new rectangle in both new corners
 	recursiveRockSmoothLeft(x, h + new_chunk_height, new_chunk_width, step_size_left - new_chunk_height);
 	recursiveRockSmoothLeft(x + new_chunk_width, h, w - new_chunk_width, new_chunk_height);
@@ -218,6 +238,11 @@ function recursiveRockSmoothLeft(x, h, w, step_size_left)
 
 function recursiveRockSmoothRight(x, h, w, step_size_right)
 {
+	for(col = x; col < x + w; col++)	// write heights to rock heights[]
+	{
+		rock_heights[col] = h;
+	}
+
 	if(step_size_right <= 1 || w <= 1)
 	{
 		return;	// finished if step is acceptable (goes down, or go up by only one)
@@ -269,6 +294,22 @@ function drawCloud(cloudNum, cloudH, cloudW) {
 }
 
 
+
+function generateTopsoil()
+{
+	for(num = 0; num < rock_heights.length; num++)
+	{
+		//console.log("height " + rock_heights[num]);
+		console.log("generating topsoil at: " + num + ", " + rock_heights[num]);
+		gRect(num, g_height - rock_heights[num], 1, 3, 140, 64, 9);
+		gRect(num, g_height - rock_heights[num] - 1, 1, 1, 116, 198, 43);
+		//line(num * PIXEL_TO_GRID_SCALE, rock_heights[num], (num +1) * PIXEL_TO_GRID_SCALE, rock_heights[num]);
+	}
+}
+
+
+
+
 function generate() {
 // GRAB USER INPUT
 
@@ -287,8 +328,9 @@ function generate() {
 // Create and draw grid
   initGrid();
   drawSky();
-  drawRockColumns(0, g_width);
   drawCloud(USR_CLOUD_NUM, USR_CLOUD_HEIGHT, USR_CLOUD_WIDTH);
+  drawRockColumns(0, g_width);
+  generateTopsoil();
   drawGrid();
 }
 
