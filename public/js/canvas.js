@@ -40,8 +40,8 @@ var INITIAL_GEN_HEIGHT;
 function setup() {
   cnv = createCanvas(800, 500);
   centerCanvas();
-  INITIAL_GEN_WIDTH = width * 4;
-  INITIAL_GEN_HEIGHT = height * 2;
+  INITIAL_GEN_WIDTH = width * 1;
+  INITIAL_GEN_HEIGHT = height * 1;
   background(220);
   generate();
 }
@@ -50,25 +50,9 @@ function setup() {
 
 function initGrid()
 {
-  /*
-	var column = [];	// create a single column
-  var row = [];
 
-	for(col = 0; col < INITIAL_GEN_HEIGHT / PIXEL_TO_GRID_SCALE; col++)	// init the single column
-	{
-		column[col] = USR_BG_COL * 10;
-	}
-
-	for(row = 0; row <  INITIAL_GEN_WIDTH / PIXEL_TO_GRID_SCALE; row++)	// init the grid to a bunch of columns
-	{
-		grid[row] = column;
-	}
-	console.log("Col size: " + column.length);
-	console.log("Row size: " + grid.length);
-  */
-
-  var cols = INITIAL_GEN_HEIGHT / PIXEL_TO_GRID_SCALE;
-  var rows = INITIAL_GEN_WIDTH / PIXEL_TO_GRID_SCALE;
+  var cols = INITIAL_GEN_WIDTH / PIXEL_TO_GRID_SCALE;
+  var rows = INITIAL_GEN_HEIGHT / PIXEL_TO_GRID_SCALE;
 
   var colIndex = 0;
   var rowIndex = 0;
@@ -84,11 +68,11 @@ function initGrid()
 }
 
 function gRect(x, y, w, h, color) {
-  for (var xindex = x; xindex < w; xindex++ )
+  for (var xindex = x; xindex < x+w; xindex++ )
   {
-    for(var yindex = y; yindex < h; yindex++ )
+    for(var yindex = y; yindex < y+h; yindex++ )
     {
-      //grid[yindex][xindex] = color;
+      grid[xindex][yindex] = color;
     }
   }
 }
@@ -164,8 +148,8 @@ function calculateRowsToRender()
 function generate() {
   USR_BG_COL = document.getElementById("regenRange").value;
   initGrid();
-  //gRect(0, 0, 1, 1, 255);
-  grid[2][2] = 255;
+  gRect(2, 3, 6, 6, 255);
+  //grid[2][2] = 255;
   drawGrid();
 }
 
