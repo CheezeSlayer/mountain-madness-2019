@@ -218,7 +218,7 @@ function drawRockColumns(col_begin, col_end)	// draw all columns
 			}
 			else
 			{
-				rock_heights[gcol] = g_height -1;	
+				rock_heights[gcol] = g_height -1;
 			}
 			//console.log("rock_heights[" + gcol + "] = " + rock_col_heights[counter]);
 		}
@@ -459,13 +459,15 @@ function generateTopsoil( begin_col, end_col )
         gRect(num-1, treeHeight, 3, 3, 0, 102, 0);
 
         while(treeGreen == true ) {
+          g = round(random(102, 153));
           treeHeight = treeHeight - 1;
-          gRect(num-1, treeHeight, 3, 3, 0, 102, 0);
+          gRect(num-1, treeHeight, 3, 3, 0, g, 0);
           treeGreenChance = treeGreenChance + 0.1;
           treeGreen = Math.random() > treeGreenChance;
         }
+        g = round(random(102, 153));
         treeHeight = treeHeight - 1;
-        gRect(num, treeHeight, 1, 1, 0, 102, 0);
+        gRect(num, treeHeight, 1, 1, 0, g, 0);
       }
 
     }
@@ -542,17 +544,17 @@ function mouseWheel(event) {
 			x_offset += round(mouseX / PIXEL_TO_GRID_SCALE);
 			y_offset += round(mouseY / PIXEL_TO_GRID_SCALE);
 		}
-		
+
 	}
 	else	// scrolling IN
 	{
-		if (PIXEL_TO_GRID_SCALE < 40) 
+		if (PIXEL_TO_GRID_SCALE < 40)
 		{
 			PIXEL_TO_GRID_SCALE -= event.delta / 100;
 			x_offset -= round(mouseX / PIXEL_TO_GRID_SCALE);
 			y_offset -= round(mouseY / PIXEL_TO_GRID_SCALE);
 		}
-		
+
 	}
 	console.log(event.delta);
 }
@@ -588,7 +590,7 @@ function draw()
 	var right_buffer = g_width - ( ((-x_offset) + width) /PIXEL_TO_GRID_SCALE);
 	if(right_buffer < NEW_GENERATION_BUFFER)
 	{
-		
+
 		//NEW_COLUMNS_TO_ADD = g_width + x_offset;
 		addColumns();
 		setColumnsToSky(g_width - NEW_COLUMNS_TO_ADD * 2, g_width - NEW_COLUMNS_TO_ADD);
@@ -681,7 +683,7 @@ function generateAllTrees()
 
 	var forest_origins = [];	// array of the origin points of each forest
 
-	{	// generate forest origins	
+	{	// generate forest origins
 		forest_number = 0;
 		forest_origins[forest_number] = round(random(0, MIN_FOREST_INTERVAL));
 		while(forest_origins[forest_number] < g_width)
@@ -763,7 +765,7 @@ function generateTree(x_origin)
 	}
 
 	// generate trunk
-	var left = x_origin - floor(tree_width/2); 
+	var left = x_origin - floor(tree_width/2);
 	gRect(left, g_height - rock_heights[left] - tree_height, tree_width, tree_height, 89, 53, 4);
 
 
