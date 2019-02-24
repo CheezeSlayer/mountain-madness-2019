@@ -1,3 +1,10 @@
+var cloud = 0
+var x_pos = [];
+var y_pos = [];
+var cloudHeight = [];
+var cloudWidth = [];
+
+var usrCloud;
 
 function cloudInit (cloudNum) {
   for (var index = 0; index < cloudNum; index++)
@@ -26,10 +33,4 @@ function clouds(cloudNum) {
 function draw() {
 
   background(50,200,250);
-  push();
-  translate(cloud, -60);
-  scale(1);
-  clouds(usrCloud);
-  pop();
-
 }

@@ -1,14 +1,7 @@
+
 var cnv;
 var x = 0;
 var y = 400;
-
-var usrCloud;
-
-var cloud = 0
-var x_pos = [];
-var y_pos = [];
-var cloudHeight = [];
-var cloudWidth = [];
 
 function centerCanvas() {
   var x = (windowWidth - width) / 2;
