@@ -337,7 +337,7 @@ function drawCloud(begin_col, end_col) {
     cloudH = round(random(1, USR_CLOUD_HEIGHT));
     cloudW = round(random(1, USR_CLOUD_WIDTH));
     x_cloud = round(random(begin_col, end_col));
-	console.log("w: " + cloudW + ", h: " + cloudH);
+	//console.log("w: " + cloudW + ", h: " + cloudH);
     y_cloud = round(random(first_row, last_row));
     //console.log(last_col, last_row);
     //console.log(x_cloud, y_cloud);
@@ -434,6 +434,12 @@ function generateTopsoil( begin_col, end_col )
     b = round(random(51, 102));
 		gRect(num, g_height - rock_heights[num] - 1, 1, 1, r, g, b);
 
+		if(random(1) > 0.9)
+		{
+		 //addFlower(num);
+		}
+		
+
     var random_boolean = Math.random() > 0.8;
 
     var treeGrowChance = 0.5;
@@ -477,6 +483,67 @@ function generateTopsoil( begin_col, end_col )
 }
 
 
+function addFlower(x_origin)
+{
+	r = round(random(102, 255));
+    g = round(random(0, 50));
+    b = round(random(0, 50));
+	gRect(x_origin, g_height - rock_heights[x_origin] - 1, 1, 1, r, g, b);
+}
+
+
+function generateAllTrees()
+{
+	var MIN_FOREST_INTERVAL = 100;
+	var MAX_FOREST_INTERVAL = 200;
+	var MIN_FOREST_SIZE = 50;
+	var MAX_FOREST_SIZE = 150;
+	var TREE_INTERVAL = 0;
+
+	var forest_origins = [];	// array of the origin points of each forest
+
+
+
+
+	{	// generate forest origins
+		forest_number = 0;
+		forest_origins[forest_number] = round(random(0, MIN_FOREST_INTERVAL));
+		console.log("origin: " + forest_origins[forest_number]);
+		while(forest_origins[forest_number] < g_width)
+		{console.log("orign added");
+			forest_number++;
+			forest_origins[forest_number] = forest_origins[forest_number -1] + round(random(MIN_FOREST_INTERVAL, MAX_FOREST_INTERVAL));
+		}
+	}
+	
+
+	for(i = 0; i < forest_origins.length; i++)	// For each forest
+	{
+		console.log("forest at: " + forest_origins[i]);
+		var forest_radius = round(random(MIN_FOREST_SIZE /2, MAX_FOREST_SIZE /2));
+		for(distance_from_origin = 1; distance_from_origin < forest_radius; distance_from_origin++)
+		{
+			if(random(1) < getGaussianTreeThreshold(90, 20, distance_from_origin))
+			{
+				distance_from_origin += TREE_INTERVAL;
+				if(forest_origins[i] + distance_from_origin < g_width)
+				{
+					addFlower(forest_origins[i] + distance_from_origin);
+				}
+				console.log("new tree at: " + distance_from_origin);
+			}
+			if(random(1) < getGaussianTreeThreshold(90, 20, distance_from_origin))
+			{
+				distance_from_origin += TREE_INTERVAL;
+				if(forest_origins[i] - distance_from_origin > 0)
+				{
+					addFlower(forest_origins[i] - distance_from_origin);
+				}
+				console.log("new tree at: " + distance_from_origin);
+			}
+		}
+	}
+}
 
 
 function generate() {
@@ -504,6 +571,7 @@ function generate() {
   generateUndergroundRocks(0, g_width);
   generateSediment(0, g_width);
   generateTopsoil(0, g_width);
+  generateAllTrees();
   drawGrid();
 }
 
