@@ -1,13 +1,13 @@
 
 var cnv;
 
-var x = 0;
-var y = 400;
+var cnv_x = 0;
+var cnv_y = 400;
 
 function centerCanvas() {
-  var x = (windowWidth - width) / 1.5;
-  var y = (windowHeight - height) / 2;
-  cnv.position(x, y);
+  var cnv_x = (windowWidth - width) / 1.5;
+  var cnv_y = (windowHeight - height) / 2;
+  cnv.position(cnv_x, cnv_y);
 }
 
 /* ### VARIABLES ### */
@@ -52,12 +52,12 @@ function initGrid()
 {
 	var column = [];	// create a single column
 
-	for(col = 0; col < INITIAL_GEN_HEIGHT / PIXEL_TO_GRID_SCALE; col++)	// init the single column
+	for(var col = 0; col < INITIAL_GEN_HEIGHT / PIXEL_TO_GRID_SCALE; col++)	// init the single column
 	{
 		column[col] = USR_BG_COL * 10;
 	}
 
-	for(row = 0; row <  INITIAL_GEN_WIDTH / PIXEL_TO_GRID_SCALE; row++)	// init the grid to a bunch of columns
+	for(var row = 0; row <  INITIAL_GEN_WIDTH / PIXEL_TO_GRID_SCALE; row++)	// init the grid to a bunch of columns
 	{
 		grid[row] = column;
 	}
@@ -65,6 +65,15 @@ function initGrid()
 	console.log("Row size: " + grid.length);
 }
 
+function gRect(x, y, w, h, color) {
+  for (var xindex = x; xindex < w; xindex++ )
+  {
+    for(var yindex = y; yindex < h; yindex++ )
+    {
+      //grid[yindex][xindex] = color;
+    }
+  }
+}
 
 function drawGrid()
 {
@@ -74,7 +83,7 @@ function drawGrid()
 	calculateColumnsToRender();
 
 // FIND FIRST AND LAST ROW TO RENDER & CHECK VALID
-  	calculateRowsToRender();
+  calculateRowsToRender();
 
 // RENDER GRID
 	for(col = first_col; col < last_col; col++)
@@ -137,6 +146,8 @@ function calculateRowsToRender()
 function generate() {
   USR_BG_COL = document.getElementById("regenRange").value;
   initGrid();
+  //gRect(0, 0, 1, 1, 255);
+  grid[2][2] = 255;
   drawGrid();
 }
 
