@@ -61,7 +61,7 @@ function initGrid()
 {
   var cols = floor(INITIAL_GEN_WIDTH / PIXEL_TO_GRID_SCALE);
   var rows = floor(INITIAL_GEN_HEIGHT / PIXEL_TO_GRID_SCALE);
-
+  console.log(cols, rows);
   var colIndex = 0;
   var rowIndex = 0;
 
@@ -259,8 +259,8 @@ function drawCloud(cloudNum, cloudH, cloudW) {
     cloudW = round(random(0, USR_CLOUD_WIDTH));
     x_cloud = round(random(first_col, last_col));
     y_cloud = round(random(first_row, last_row));
-    console.log(last_col, last_row);
-    console.log(x_cloud, y_cloud);
+    //console.log(last_col, last_row);
+    //console.log(x_cloud, y_cloud);
     cloudArr[index] = gRect(x_cloud, y_cloud, cloudW, cloudH, 255, 255, 255);
   }
 
@@ -282,8 +282,8 @@ function generate() {
   USR_CLOUD_NUM = document.getElementById("cloudNumRange").valueAsNumber;
   USR_CLOUD_HEIGHT = document.getElementById("cloudHeightRange").valueAsNumber;
   USR_CLOUD_WIDTH = document.getElementById("cloudWidthRange").valueAsNumber;
-  USR_CLOUD_MAXH = g_height/2;
-  USR_CLOUD_MAXW = g_width;
+  USR_CLOUD_MAXH = document.getElementById("cloudMaxHRange").valueAsNumber;
+  USR_CLOUD_MAXW = document.getElementById("cloudMaxWRange").valueAsNumber;
 
 // Create and draw grid
   initGrid();
@@ -385,4 +385,18 @@ var cloudWidthOutput = document.getElementById("cloudWidthNumber");
 cloudWidthOutput.innerHTML = cloudWidthSlider.value;
 cloudWidthSlider.oninput = function() {
   cloudWidthOutput.innerHTML = this.value;
+}
+
+var cloudMaxHSlider = document.getElementById("cloudMaxHRange");
+var cloudMaxHOutput = document.getElementById("cloudMaxHNumber");
+cloudMaxHOutput.innerHTML = cloudMaxHSlider.value;
+cloudMaxHSlider.oninput = function() {
+  cloudMaxHOutput.innerHTML = this.value;
+}
+
+var cloudMaxWSlider = document.getElementById("cloudMaxWRange");
+var cloudMaxWOutput = document.getElementById("cloudMaxWNumber");
+cloudMaxWOutput.innerHTML = cloudMaxWSlider.value;
+cloudMaxWSlider.oninput = function() {
+  cloudMaxWOutput.innerHTML = this.value;
 }

@@ -48,7 +48,7 @@
 
   <div class="mtnHeightDiv">
     <h1>Mountain Height</h1>
-    <input type="range" min="1" max="10" value="5" class="slider" id="mtnHeightRange">
+    <input type="range" min="1" max="150" value="100" class="slider" id="mtnHeightRange">
     <span id="mtnHeightNumber"></span>
   </div>
 
@@ -69,6 +69,20 @@
     <input type="range" min="1" max="50" value="25" class="slider" id="cloudWidthRange">
     <span id="cloudWidthNumber"></span>
   </div>
+
+  <div class="cloudMaxHDiv">
+    <h1>Cloud Elevation</h1>
+    <input type="range" min="1" max="800" value="400" class="slider" id="cloudMaxHRange">
+    <span id="cloudMaxHNumber"></span>
+  </div>
+
+  <div class="cloudMaxWDiv">
+    <h1>Cloud Range</h1>
+    <input type="range" min="1" max="150" value="100" class="slider" id="cloudMaxWRange">
+    <span id="cloudMaxWNumber"></span>
+  </div>
+
+
   <button id="submitbtn" onclick="generate()">Submit</button>
 
 </div>
