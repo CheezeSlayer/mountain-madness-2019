@@ -5,7 +5,6 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.3/p5.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.3/addons/p5.dom.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.3/addons/p5.sound.min.js"></script>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script type="text/javascript">
@@ -38,12 +37,12 @@
     <p>Value: <span id="treeNumber"></span></p>
   </div>
 
-  <button id="submitbtn" onclick="">Submit</button>
+  <button id="submitbtn" onclick="generate()">Submit</button>
 </body>
 </html>
 
 <script src="/js/canvas.js"></script>
-<script src="/js/clouds.js"></script>
+
 
 <script>
 var cloudSlider = document.getElementById("cloudRange");
@@ -66,4 +65,6 @@ treeOutput.innerHTML = treeSlider.value;
 treeSlider.oninput = function() {
   treeOutput.innerHTML = this.value;
 }
+
+
 </script>
