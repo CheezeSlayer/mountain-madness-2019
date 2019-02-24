@@ -320,7 +320,7 @@ function mouseWheel(event) {
 
 function mouseDragged()
 {
-	if(mouseX > 0 && mouseX < width)
+	if(mouseX > 250 && mouseX < width)
 	{
 		if(mouseY > 0 && mouseY < height)
 		{

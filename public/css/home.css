@@ -6,10 +6,12 @@
 .sliderDiv {
   margin: 0;
   padding: 0;
-  width: 30%;
+  width: 20%;
   text-align: center;
   z-index: 1000px;
   position: fixed;
+  border-right-style: solid;
+  border-radius: 1px;
 }
 
 .sliderDiv h1 {
