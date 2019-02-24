@@ -53,7 +53,7 @@ function setup() {
   cnv = createCanvas(windowWidth, windowHeight);
   centerCanvas();
   cnv.parent(document.getElementById("canvas-div"));
-  INITIAL_GEN_WIDTH = width * 20;
+  INITIAL_GEN_WIDTH = width * 30;
   INITIAL_GEN_HEIGHT = height * 5;
   background(220);
   generate();
@@ -120,7 +120,7 @@ function gRect(x, y, w, h, r, g, b) {
 
 function drawGrid()
 {
- 	background(220);
+ 	background(10);
 
 // FIND FIRST AND LAST COL TO RENDER & CHECK VALID
 	calculateColumnsToRender();
@@ -183,7 +183,10 @@ function calculateRowsToRender()
 	}
 }
 
-
+function getGaussianTreeThreshold(density, radius, column_rel_to_origin)
+{
+	return (density / 100) * pow(2, -pow(column_rel_to_origin, 2) / (2 * pow(radius, 2)));
+}
 
 /* ##### GENERATION FUNCTIONS ##### */
 
@@ -348,6 +351,71 @@ function drawCloud(begin_col, end_col) {
 }
 
 
+function generateUndergroundRocks(begin_col, end_col)
+{
+	MAX_DEPTH = 100;
+	for(current_col = begin_col; current_col < end_col; current_col++)
+	{
+		for(depth = 0; depth < MAX_DEPTH; depth++)
+		{
+			if(depth > rock_heights[current_col])
+			{
+				break;
+			}
+			if(random(1) < getGaussianTreeThreshold(56, 10, depth))
+			{
+				var r, g, b;
+				  r = round(random(90, 128));
+				  g = round(random(90, 128));
+				  b = round(random(90, 128));
+				gRect(current_col, g_height - rock_heights[current_col] + depth, 1, 1, r, g, b);
+			}
+		}
+		
+	}
+}
+
+
+function generateSedimentLayer(layer, thickness, begin_col, end_col, variance, intensity, falloff, rIn, gIn, bIn)
+{
+	
+	for(current_col = begin_col; current_col < end_col; current_col++)
+	{
+		for(dist_from_layer = 0; dist_from_layer < thickness; dist_from_layer++)
+		{
+			if(layer + dist_from_layer > rock_heights[current_col])
+			{
+				break;
+			}
+			if(random(1) < getGaussianTreeThreshold(intensity, falloff, dist_from_layer))
+			{
+				var r, g, b;
+				  r = rIn + round(random(-variance, variance));
+				  g = gIn + round(random(-variance, variance))
+				  b = bIn + round(random(-variance, variance));
+				gRect(current_col, g_height - layer - dist_from_layer, 1, 1, r, g, b);
+			}
+			if(random(1) < getGaussianTreeThreshold(intensity, falloff, dist_from_layer))
+			{
+				var r, g, b;
+				  r = rIn + round(random(-variance, variance));
+				  g = gIn + round(random(-variance, variance))
+				  b = bIn + round(random(-variance, variance));
+				gRect(current_col, g_height - layer + dist_from_layer, 1, 1, r, g, b);
+			}
+		}
+	}
+	
+}
+
+
+function generateSediment(begin_col, end_col)
+{
+	generateSedimentLayer(50, 5, begin_col, end_col, 10, 50, 3, 90, 90, 90);
+	generateSedimentLayer(35, 3, begin_col, end_col, 10, 80, 5, 90, 80, 80);
+	generateSedimentLayer(25, 4, begin_col, end_col, 10, 80, 5, 100, 80, 80);
+}
+
 
 function generateTopsoil( begin_col, end_col )
 {
@@ -385,7 +453,7 @@ function generateTopsoil( begin_col, end_col )
         treeGrow = Math.random() >treeGrowChance;
       }
       treeHeight = treeHeight - 1;
-      console.log(num);
+      //console.log(num);
 
       if ( num - 1 > 0 ) {
         gRect(num-1, treeHeight, 3, 3, 0, 102, 0);
@@ -431,6 +499,8 @@ function generate() {
   drawSky();
   drawCloud(0, g_width);
   drawRockColumns(0, g_width);
+  generateUndergroundRocks(0, g_width);
+  generateSediment(0, g_width);
   generateTopsoil(0, g_width);
   drawGrid();
 }
@@ -462,6 +532,7 @@ function keyPressed() {
 }
 
 
+/*
 function mouseWheel(event) {
 	if(event.delta > 0)	//scrolling OUT
 	{
@@ -485,6 +556,7 @@ function mouseWheel(event) {
 	}
 	console.log(event.delta);
 }
+*/
 
 
 function mouseDragged()
@@ -495,6 +567,14 @@ function mouseDragged()
 		{
 			x_offset += (mouseX - pmouseX);
 			y_offset += (mouseY - pmouseY);
+			if(y_offset > 0)
+			{
+				y_offset = 0;
+			}
+			if(y_offset < -3018)
+			{
+				y_offset = -3018;
+			}
 		}
 	}
 }
@@ -640,10 +720,7 @@ function generateAllTrees()
 }
 
 
-function getGaussianTreeThreshold(density, radius, column_rel_to_origin)
-{
-	return (density / 100) * pow(2, -pow(column_rel_to_origin, 2) / (2 * pow(radius, 2)));
-}
+
 
 
 function generateTree(x_origin)
