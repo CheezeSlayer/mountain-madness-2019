@@ -301,13 +301,67 @@ function generateTopsoil()
 	{
 		//console.log("height " + rock_heights[num]);
 		console.log("generating topsoil at: " + num + ", " + rock_heights[num]);
-		gRect(num, g_height - rock_heights[num], 1, 3, 140, 64, 9);
-		gRect(num, g_height - rock_heights[num] - 1, 1, 1, 116, 198, 43);
-		//line(num * PIXEL_TO_GRID_SCALE, rock_heights[num], (num +1) * PIXEL_TO_GRID_SCALE, rock_heights[num]);
+		gRect(num, g_height - rock_heights[num] + 1, 1, 3, 140, 64, 9);
+		gRect(num, g_height - rock_heights[num], 1, 1, 116, 198, 43);
+		//strokeWeight(10);
+		//stroke(0);
+		//line(num * PIXEL_TO_GRID_SCALE, (g_height - rock_heights[num]) * PIXEL_TO_GRID_SCALE, (num +1) * PIXEL_TO_GRID_SCALE, (g_height - rock_heights[num]) * PIXEL_TO_GRID_SCALE);
 	}
 }
 
 
+function generateForest()
+{
+	var MIN_FOREST_INTERVAL = 300;
+	var MAX_FOREST_INTERVAL = 500;
+
+	var forest_origins = [];
+	forest_origins[0] = round(random(0, MIN_FOREST_INTERVAL));
+
+
+	for(i = 0; i < forest_origins.length; i++)
+	{
+		gRect(forest_origins[i], rock_heights[i], 1, 10, 255, 255, 255);
+	}
+}
+
+
+function generateTree()
+{
+	var MIN_ROOT_LENGTH = 1;
+	var MAX_ROOT_LENGTH = 5;
+	var MAX_HEIGHT = 25;
+	var MIN_HEIGHT = 8;
+
+	var x_origin = 10;
+
+	var root_length_left = 5 //round(random(MIN_ROOT_LENGTH, MAX_ROOT_LENGTH));
+	var root_length_right = 5 //round(random(MIN_ROOT_LENGTH, MAX_ROOT_LENGTH));
+	console.log(root_length_left);
+
+	gRect(x_origin, g_height - rock_heights[x_origin], 1, 1, 0, 0, 0);	// origin pixel
+
+	var root_height = rock_heights[x_origin];
+	for(lr = 1; lr < root_length_left; lr++)	// lay left root in topsoil
+	{
+		gRect(x_origin - lr, g_height - root_height, 1, 1, 89, 53, 4);
+		if(random(1) > 0.5)
+		{
+			gRect(x_origin - lr, g_height - root_height + 1, 1, 1, 89, 53, 4);
+			root_height--;
+		}
+	}
+	root_height = rock_heights[x_origin];
+	for(rr = 1; rr < root_length_right; rr++)	// lay right root in topsoil
+	{
+		gRect(x_origin + rr, g_height - root_height, 1, 1, 89, 53, 4);
+		if(random(1) > 0.5)
+		{
+			gRect(x_origin + rr, g_height - root_height + 1, 1, 1, 89, 53, 4);
+			root_height--;
+		}
+	}
+}
 
 
 function generate() {
@@ -331,6 +385,7 @@ function generate() {
   drawCloud(USR_CLOUD_NUM, USR_CLOUD_HEIGHT, USR_CLOUD_WIDTH);
   drawRockColumns(0, g_width);
   generateTopsoil();
+  generateTree();
   drawGrid();
 }
 
