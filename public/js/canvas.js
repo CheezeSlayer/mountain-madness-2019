@@ -23,8 +23,9 @@ var USR_CLOUD_NUM;
 var USR_CLOUD_HEIGHT;
 var USR_CLOUD_WIDTH;
 var USR_CLOUD_SPACING;
+
 // List CONSTANT variables
-var PIXEL_TO_GRID_SCALE = 5;	// how many pixels wide is a grid pixel
+var PIXEL_TO_GRID_SCALE = 25;	// how many pixels wide is a grid pixel
 var BACKGROUND_COL = 10;
 
 // Other global variables
@@ -48,6 +49,7 @@ var INITIAL_GEN_HEIGHT;
 function setup() {
   cnv = createCanvas(windowWidth, windowHeight);
   centerCanvas();
+  cnv.parent(document.getElementById("canvas-div"));
   INITIAL_GEN_WIDTH = width * 10;
   INITIAL_GEN_HEIGHT = height * 3;
   background(220);
@@ -184,7 +186,7 @@ function drawRockColumns(col_begin, col_end)	// draw all columns
 		drawSingleColumn(col, USR_ROCK_COL_WIDTH, rock_col_heights[counter]);
 		counter++;
 	}
-	
+
 
 	for(var col = 1; col < rock_col_heights.length; col++)
 	{
@@ -272,15 +274,17 @@ function drawCloud(cloudNum, cloudH, cloudW) {
 
 function generate() {
 // GRAB USER INPUT
-  USR_ROCK_COL_WIDTH = 10;
-  USR_SIN_AMP = 20;
-  USR_SIN_FREQ = 5;
-  USR_SIN_DEVIATION = 1;
-  USR_MTN_HEIGHT = 60;
 
-  USR_CLOUD_NUM = 5;
-  USR_CLOUD_HEIGHT = 5;
-  USR_CLOUD_WIDTH = 8;
+  USR_ROCK_COL_WIDTH = document.getElementById("rockColWidthRange").valueAsNumber;
+  USR_SIN_AMP = document.getElementById("sinAmpRange").valueAsNumber;
+  USR_SIN_FREQ = document.getElementById("sinFreqRange").valueAsNumber;
+  USR_SIN_DEVIATION = document.getElementById("sinDeviationRange").valueAsNumber;
+  USR_MTN_HEIGHT = document.getElementById("mtnHeightRange").valueAsNumber;
+
+  USR_CLOUD_NUM = document.getElementById("cloudNumRange").valueAsNumber;
+  USR_CLOUD_HEIGHT = document.getElementById("cloudHeightRange").valueAsNumber;
+  USR_CLOUD_WIDTH = document.getElementById("cloudWidthRange").valueAsNumber;
+
   USR_CLOUD_MAXH = g_height/2;
   USR_CLOUD_MAXW = g_width;
 
@@ -309,6 +313,12 @@ function keyPressed() {
   	console.log("g_width: " + g_width);
   	console.log("g_height: "  + g_height);
   }
+}
+
+
+function mouseWheel(event) {
+	PIXEL_TO_GRID_SCALE -= event.delta / 100;
+	console.log(event.delta);
 }
 
 
@@ -349,4 +359,39 @@ var sinFreqOutput = document.getElementById("sinFreqNumber");
 sinFreqOutput.innerHTML = sinFreqSlider.value;
 sinFreqSlider.oninput = function() {
   sinFreqOutput.innerHTML = this.value;
+}
+
+var sinDeviationSlider = document.getElementById("sinDeviationRange");
+var sinDeviationOutput = document.getElementById("sinDeviationNumber");
+sinDeviationOutput.innerHTML = sinDeviationSlider.value;
+sinDeviationSlider.oninput = function() {
+  sinDeviationOutput.innerHTML = this.value;
+}
+
+var mtnHeightSlider = document.getElementById("mtnHeightRange");
+var mtnHeightOutput = document.getElementById("mtnHeightNumber");
+mtnHeightOutput.innerHTML = mtnHeightSlider.value;
+mtnHeightSlider.oninput = function() {
+  mtnHeightOutput.innerHTML = this.value;
+}
+
+var cloudNumSlider = document.getElementById("cloudNumRange");
+var cloudNumOutput = document.getElementById("cloudNumNumber");
+cloudNumOutput.innerHTML = cloudNumSlider.value;
+cloudNumSlider.oninput = function() {
+  cloudNumOutput.innerHTML = this.value;
+}
+
+var cloudHeightSlider = document.getElementById("cloudHeightRange");
+var cloudHeightOutput = document.getElementById("cloudHeightNumber");
+cloudHeightOutput.innerHTML = cloudNumSlider.value;
+cloudHeightSlider.oninput = function() {
+  cloudHeightOutput.innerHTML = this.value;
+}
+
+var cloudWidthSlider = document.getElementById("cloudWidthRange");
+var cloudWidthOutput = document.getElementById("cloudWidthNumber");
+cloudWidthOutput.innerHTML = cloudWidthSlider.value;
+cloudWidthSlider.oninput = function() {
+  cloudWidthOutput.innerHTML = this.value;
 }

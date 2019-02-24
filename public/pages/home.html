@@ -17,27 +17,58 @@
 <br>
 <br>
 
+<div id="canvas-div">
+</div>
 
 <div class="sliderDiv">
 
   <div class="rockColWidthDiv">
     <h1>Rock Column Width</h1>
-    <input type="range" min="1" max="8" value="4" class="slider" id="rockColWidthRange">
-    <p>Value: <span id="rockColWidthNumber"></span></p>
+    <input type="range" min="1" max="50" value="25" class="slider" id="rockColWidthRange">
+    <span id="rockColWidthNumber"></span>
   </div>
 
   <div class="sinAmpDiv">
     <h1>SIN Amplifier</h1>
-    <input type="range" min="0" max="10" value="5" class="slider" id="sinAmpRange">
-    <p>Value: <span id="sinAmpNumber"></span></p>
+    <input type="range" min="0" max="200" value="100" class="slider" id="sinAmpRange">
+    <span id="sinAmpNumber"></span>
   </div>
 
   <div class="sinFreqDiv">
     <h1>SIN Frequency</h1>
-    <input type="range" min="0" max="50" value="10" class="slider" id="sinFreqRange">
-    <p>Value: <span id="sinFreqNumber"></span></p>
+    <input type="range" min="1" max="200" value="100" class="slider" id="sinFreqRange">
+    <span id="sinFreqNumber"></span>
   </div>
 
+  <div class="sinDeviationDiv">
+    <h1>SIN Deviation</h1>
+    <input type="range" min="1" max="10" value="5" class="slider" id="sinDeviationRange">
+    <span id="sinDeviationNumber"></span>
+  </div>
+
+  <div class="mtnHeightDiv">
+    <h1>Mountain Height</h1>
+    <input type="range" min="1" max="10" value="5" class="slider" id="mtnHeightRange">
+    <span id="mtnHeightNumber"></span>
+  </div>
+
+  <div class="cloudNumDiv">
+    <h1>Cloud Count</h1>
+    <input type="range" min="1" max="20" value="10" class="slider" id="cloudNumRange">
+    <span id="cloudNumNumber"></span>
+  </div>
+
+  <div class="cloudHeightDiv">
+    <h1>Cloud Height (Max)</h1>
+    <input type="range" min="10" max="20" value="15" class="slider" id="cloudHeightRange">
+    <span id="cloudHeightNumber"></span>
+  </div>
+
+  <div class="cloudWidthDiv">
+    <h1>Cloud Width (Max)</h1>
+    <input type="range" min="1" max="50" value="25" class="slider" id="cloudWidthRange">
+    <span id="cloudWidthNumber"></span>
+  </div>
   <button id="submitbtn" onclick="generate()">Submit</button>
 
 </div>
