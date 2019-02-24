@@ -212,12 +212,12 @@ function drawRockColumns(col_begin, col_end)	// draw all columns
 
 function recursiveRockSmoothLeft(x, h, w, step_size_left)
 {
-	
+
 	for(col = x; col < x + w; col++)	// write heights to rock heights[]
 	{
 		rock_heights[col] = h;
 	}
-	
+
 
 	if(step_size_left <= 1 || w <= 1)
 	{
@@ -226,7 +226,12 @@ function recursiveRockSmoothLeft(x, h, w, step_size_left)
 	// create a rectangle that has a random size and is nestled into the corner
 	var new_chunk_height = floor(random(1, step_size_left));
 	var new_chunk_width = floor(random(1, w));
-	gRect(x, g_height - (h + new_chunk_height), new_chunk_width, new_chunk_height, 130, 14, 85);
+
+  var r, g, b;
+  r = round(random(90, 128));
+  g = round(random(90, 128));
+  b = round(random(90, 128));
+	gRect(x, g_height - (h + new_chunk_height), new_chunk_width, new_chunk_height, r, b, g);
 
 
 
@@ -250,7 +255,12 @@ function recursiveRockSmoothRight(x, h, w, step_size_right)
 	// create a rectangle that has a random size and is nestled into the corner
 	var new_chunk_height = floor(random(1, step_size_right));
 	var new_chunk_width = floor(random(1, w));
-	gRect(x + (w - new_chunk_width), g_height - (h + new_chunk_height), new_chunk_width, new_chunk_height, 130, 14, 85);
+
+  var r, g, b;
+  r = round(random(90, 128));
+  g = round(random(90, 128));
+  b = round(random(90, 128));
+	gRect(x + (w - new_chunk_width), g_height - (h + new_chunk_height), new_chunk_width, new_chunk_height, r, b, g);
 
 	// recursive call for new rectangle in both new corners
 	recursiveRockSmoothRight(x + (w - new_chunk_width), h + new_chunk_height, new_chunk_width, step_size_right - new_chunk_height);
@@ -261,7 +271,11 @@ function recursiveRockSmoothRight(x, h, w, step_size_right)
 // !!! Merge back into drawRockColumns()???
 function drawSingleColumn(grid_x, col_width, col_height)	// draw a single column
 {
-	gRect(grid_x, g_height - col_height, col_width, col_height, 130, 14, 85);
+  var r, g, b;
+  r = round(random(90, 128));
+  g = round(random(90, 128));
+  b = round(random(90, 128));
+	gRect(grid_x, g_height - col_height, col_width, col_height, r, g, b);
 }
 
 function drawCloud(cloudNum, cloudH, cloudW) {
@@ -284,6 +298,10 @@ function drawCloud(cloudNum, cloudH, cloudW) {
     y_cloud = round(random(first_row, last_row));
     //console.log(last_col, last_row);
     //console.log(x_cloud, y_cloud);
+    /*var r , g , b;
+    r = round(random(204, 255));
+    g = round(random(204, 255));
+    b = round(random(204, 255));*/
     cloudArr[index] = gRect(x_cloud, y_cloud, cloudW, cloudH, 255, 255, 255);
   }
 
@@ -299,10 +317,18 @@ function generateTopsoil()
 {
 	for(num = 0; num < rock_heights.length; num++)
 	{
+    var r, g, b
 		//console.log("height " + rock_heights[num]);
 		console.log("generating topsoil at: " + num + ", " + rock_heights[num]);
-		gRect(num, g_height - rock_heights[num], 1, 3, 140, 64, 9);
-		gRect(num, g_height - rock_heights[num] - 1, 1, 1, 116, 198, 43);
+    r = round(random(102, 153));
+    g = round(random(51, 102));
+    b = round(random(0, 51));
+		gRect(num, g_height - rock_heights[num], 1, 3, r, g, b);
+
+    r = round(random(0, 102));
+    g = round(random(153, 255));
+    b = round(random(51, 102));
+		gRect(num, g_height - rock_heights[num] - 1, 1, 1, r, g, b);
 		//line(num * PIXEL_TO_GRID_SCALE, rock_heights[num], (num +1) * PIXEL_TO_GRID_SCALE, rock_heights[num]);
 	}
 }
