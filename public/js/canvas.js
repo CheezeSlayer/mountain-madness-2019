@@ -34,7 +34,7 @@ var grid = [];	// array of COLUMNS
 var rock_heights = [];	// array of heights of ground level at every grid pixel
 var g_width;
 var g_height;
-var x_offset = 0;
+var x_offset = -19000;
 var y_offset = 0;
 var first_col;	// first column to render
 var last_col;
@@ -53,11 +53,11 @@ function setup() {
   cnv = createCanvas(windowWidth, windowHeight);
   centerCanvas();
   cnv.parent(document.getElementById("canvas-div"));
-  INITIAL_GEN_WIDTH = width * 2;
-  INITIAL_GEN_HEIGHT = height * 3;
-  NEW_COLUMNS_TO_ADD = floor(width / PIXEL_TO_GRID_SCALE);
+  INITIAL_GEN_WIDTH = width * 20;
+  INITIAL_GEN_HEIGHT = height * 5;
   background(220);
   generate();
+  NEW_GENERATION_BUFFER += USR_ROCK_COL_WIDTH;
 }
 
 
@@ -80,6 +80,7 @@ function initGrid()
   }
 
   g_width = cols;
+  g_width -= g_width % USR_ROCK_COL_WIDTH;
   g_height = rows;
 }
 
@@ -91,7 +92,7 @@ function addColumns()
 	    grid[colIndex] = [];
 	    for ( rowIndex = 0; rowIndex < floor(INITIAL_GEN_HEIGHT / PIXEL_TO_GRID_SCALE); rowIndex++ )
 	    {
-	      grid[colIndex][rowIndex] = color(0, 0, 0);
+	      grid[colIndex][rowIndex] = color(132, 198, 237);
 	    }
  	}
  	g_width += NEW_COLUMNS_TO_ADD;
@@ -147,7 +148,7 @@ function drawGrid()
 function calculateColumnsToRender()
 {
 	first_col = floor( -(x_offset / PIXEL_TO_GRID_SCALE));
-	last_col = first_col + floor(width / PIXEL_TO_GRID_SCALE);
+	last_col = first_col + ceil(width / PIXEL_TO_GRID_SCALE) + 1;
 	if(first_col < 0){
 		first_col = 0;
 	}
@@ -166,7 +167,7 @@ function calculateColumnsToRender()
 function calculateRowsToRender()
 {
 	first_row = floor( -(y_offset / PIXEL_TO_GRID_SCALE));
-	last_row = first_row + floor(height / PIXEL_TO_GRID_SCALE);
+	last_row = first_row + ceil(height / PIXEL_TO_GRID_SCALE) + 1;
 	if(first_row < 0){
 		first_row = 0;
 	}
@@ -226,11 +227,11 @@ function drawRockColumns(col_begin, col_end)	// draw all columns
 	{
 		if(rock_col_heights[col -1] > rock_col_heights[col])
 		{
-			recursiveRockSmoothLeft(col * USR_ROCK_COL_WIDTH, rock_col_heights[col], USR_ROCK_COL_WIDTH, rock_col_heights[col -1] - rock_col_heights[col]);
+			recursiveRockSmoothLeft((col * USR_ROCK_COL_WIDTH) + col_begin, rock_col_heights[col], USR_ROCK_COL_WIDTH, rock_col_heights[col -1] - rock_col_heights[col]);
 		}
 		if(rock_col_heights[col -1] < rock_col_heights[col])
 		{
-			recursiveRockSmoothRight((col -1) * USR_ROCK_COL_WIDTH, rock_col_heights[col -1], USR_ROCK_COL_WIDTH, rock_col_heights[col] - rock_col_heights[col -1]);
+			recursiveRockSmoothRight(((col -1) * USR_ROCK_COL_WIDTH) + col_begin, rock_col_heights[col -1], USR_ROCK_COL_WIDTH, rock_col_heights[col] - rock_col_heights[col -1]);
 		}
 	}
 }
@@ -318,13 +319,11 @@ function drawSingleColumn(grid_x, col_width, col_height)	// draw a single column
 	gRect(grid_x, g_height - col_height, col_width, col_height, r, g, b);
 }
 
-function drawCloud(cloudNum, cloudH, cloudW) {
+function drawCloud(begin_col, end_col) {
   cloudNum = USR_CLOUD_NUM;
-  cloudH = USR_CLOUD_HEIGHT;
-  cloudW = USR_CLOUD_WIDTH;
-  first_col = 0;
+  var cloudH = USR_CLOUD_HEIGHT;
+  var cloudW = USR_CLOUD_WIDTH;
   first_row = 0;
-  last_col = g_width;
   last_row = g_height/2;
   x_cloud = 0;
   y_cloud = 0;
@@ -332,9 +331,10 @@ function drawCloud(cloudNum, cloudH, cloudW) {
   var cloudArr = [];
   for( var index = 0; index < cloudNum; index++ )
   {
-    cloudH = round(random(0, USR_CLOUD_HEIGHT));
-    cloudW = round(random(0, USR_CLOUD_WIDTH));
-    x_cloud = round(random(first_col, last_col));
+    cloudH = round(random(1, USR_CLOUD_HEIGHT));
+    cloudW = round(random(1, USR_CLOUD_WIDTH));
+    x_cloud = round(random(begin_col, end_col));
+	console.log("w: " + cloudW + ", h: " + cloudH);
     y_cloud = round(random(first_row, last_row));
     //console.log(last_col, last_row);
     //console.log(x_cloud, y_cloud);
@@ -342,20 +342,16 @@ function drawCloud(cloudNum, cloudH, cloudW) {
     r = round(random(204, 255));
     g = round(random(204, 255));
     b = round(random(204, 255));*/
-    cloudArr[index] = gRect(x_cloud, y_cloud, cloudW, cloudH, 255, 255, 255);
+    gRect(x_cloud, y_cloud, cloudW, cloudH, 255, 255, 255);
   }
 
-  for ( var index = 0; index < cloudNum; index++ )
-  {
-    cloudArr[index] += 0.2;
-  }
 }
 
 
 
-function generateTopsoil()
+function generateTopsoil( begin_col, end_col )
 {
-	for(num = 0; num < rock_heights.length; num++)
+	for(num = begin_col; num < end_col; num++)
 	{
     var r, g, b
 		//console.log("height " + rock_heights[num]);
@@ -428,13 +424,21 @@ function generate() {
   USR_CLOUD_MAXH = document.getElementById("cloudMaxHRange").valueAsNumber;
   USR_CLOUD_MAXW = document.getElementById("cloudMaxWRange").valueAsNumber;
 
+  NEW_COLUMNS_TO_ADD = USR_ROCK_COL_WIDTH;
+
 // Create and draw grid
   initGrid();
   drawSky();
-  drawCloud(USR_CLOUD_NUM, USR_CLOUD_HEIGHT, USR_CLOUD_WIDTH);
+  drawCloud(0, g_width);
   drawRockColumns(0, g_width);
-  generateTopsoil();
+  generateTopsoil(0, g_width);
   drawGrid();
+}
+
+
+function setColumnsToSky(begin_col, end_col)
+{
+	gRect(begin_col, 0, end_col - begin_col, g_height, 132, 198, 237);
 }
 
 
@@ -459,18 +463,27 @@ function keyPressed() {
 
 
 function mouseWheel(event) {
-	PIXEL_TO_GRID_SCALE -= event.delta / 100;
-	if(event.delta > 0)
+	if(event.delta > 0)	//scrolling OUT
 	{
-		x_offset += PIXEL_TO_GRID_SCALE;
-		y_offset += PIXEL_TO_GRID_SCALE;
+		if(PIXEL_TO_GRID_SCALE > 10)
+		{
+			PIXEL_TO_GRID_SCALE -= event.delta / 100;
+			x_offset += round(mouseX / PIXEL_TO_GRID_SCALE);
+			y_offset += round(mouseY / PIXEL_TO_GRID_SCALE);
+		}
+		
 	}
-	else
+	else	// scrolling IN
 	{
-		x_offset -= PIXEL_TO_GRID_SCALE;
-		y_offset -= PIXEL_TO_GRID_SCALE;
+		if (PIXEL_TO_GRID_SCALE < 40) 
+		{
+			PIXEL_TO_GRID_SCALE -= event.delta / 100;
+			x_offset -= round(mouseX / PIXEL_TO_GRID_SCALE);
+			y_offset -= round(mouseY / PIXEL_TO_GRID_SCALE);
+		}
+		
 	}
-	//console.log(event.delta);
+	console.log(event.delta);
 }
 
 
@@ -491,12 +504,19 @@ function draw()
 {
 	drawGrid();
 
+/*
 	var right_buffer = g_width - ( ((-x_offset) + width) /PIXEL_TO_GRID_SCALE);
 	if(right_buffer < NEW_GENERATION_BUFFER)
 	{
+		
+		//NEW_COLUMNS_TO_ADD = g_width + x_offset;
 		addColumns();
-		drawRockColumns(g_width - NEW_COLUMNS_TO_ADD, g_width);
+		setColumnsToSky(g_width - NEW_COLUMNS_TO_ADD * 2, g_width - NEW_COLUMNS_TO_ADD);
+		drawCloud(g_width - NEW_COLUMNS_TO_ADD, g_width);
+		drawRockColumns(g_width - NEW_COLUMNS_TO_ADD * 2, g_width);
+		generateTopsoil(g_width - NEW_COLUMNS_TO_ADD * 2, g_width);
 	}
+	*/
 }
 
 var rockColWidthSlider = document.getElementById("rockColWidthRange");
