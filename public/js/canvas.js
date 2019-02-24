@@ -27,6 +27,7 @@ var USR_CLOUD_SPACING;
 // List CONSTANT variables
 var PIXEL_TO_GRID_SCALE = 25;	// how many pixels wide is a grid pixel
 var BACKGROUND_COL = 10;
+var NEW_COLUMNS_TO_ADD;
 
 // Other global variables
 var grid = [];	// array of COLUMNS
@@ -41,6 +42,7 @@ var first_row;	// first row to render
 var last_row;
 var INITIAL_GEN_WIDTH;
 var INITIAL_GEN_HEIGHT;
+var NEW_GENERATION_BUFFER = 10;
 
 // Canvas width and height
 
@@ -51,8 +53,9 @@ function setup() {
   cnv = createCanvas(windowWidth, windowHeight);
   centerCanvas();
   cnv.parent(document.getElementById("canvas-div"));
-  INITIAL_GEN_WIDTH = width * 10;
+  INITIAL_GEN_WIDTH = width * 2;
   INITIAL_GEN_HEIGHT = height * 3;
+  NEW_COLUMNS_TO_ADD = floor(width / PIXEL_TO_GRID_SCALE);
   background(220);
   generate();
 }
@@ -78,6 +81,20 @@ function initGrid()
 
   g_width = cols;
   g_height = rows;
+}
+
+
+function addColumns()
+{
+	for ( colIndex = g_width; colIndex < g_width + NEW_COLUMNS_TO_ADD; colIndex++ )
+ 	{
+	    grid[colIndex] = [];
+	    for ( rowIndex = 0; rowIndex < floor(INITIAL_GEN_HEIGHT / PIXEL_TO_GRID_SCALE); rowIndex++ )
+	    {
+	      grid[colIndex][rowIndex] = color(0, 0, 0);
+	    }
+ 	}
+ 	g_width += NEW_COLUMNS_TO_ADD;
 }
 
 
@@ -179,10 +196,11 @@ function drawRockColumns(col_begin, col_end)	// draw all columns
 {
 	var counter = 0;
 	var rock_col_heights = [];
-	for(var col = 0; col < col_end; col += USR_ROCK_COL_WIDTH)
+	for(var col = col_begin; col < col_end; col += USR_ROCK_COL_WIDTH)
 	{
 		var random_offset = round(random(-USR_SIN_DEVIATION, USR_SIN_DEVIATION));
 		rock_col_heights[counter] = random_offset + (USR_MTN_HEIGHT + round(USR_SIN_AMP * sin(col / USR_SIN_FREQ)));
+		console.log("here we go!");
 		drawSingleColumn(col, USR_ROCK_COL_WIDTH, rock_col_heights[counter]);
 
 		//console.log("for range: " + col + " - " + (col + USR_ROCK_COL_WIDTH));
@@ -293,10 +311,10 @@ function recursiveRockSmoothRight(x, h, w, step_size_right)
 // !!! Merge back into drawRockColumns()???
 function drawSingleColumn(grid_x, col_width, col_height)	// draw a single column
 {
-  var r, g, b;
-  r = round(random(90, 128));
-  g = round(random(90, 128));
-  b = round(random(90, 128));
+	var r, g, b;
+	r = round(random(90, 128));
+	g = round(random(90, 128));
+	b = round(random(90, 128));
 	gRect(grid_x, g_height - col_height, col_width, col_height, r, g, b);
 }
 
@@ -430,6 +448,7 @@ function keyPressed() {
   	console.log("y_offset: "  + y_offset);
   	console.log("g_width: " + g_width);
   	console.log("g_height: "  + g_height);
+  	console.log("Right_Buffer: " + (g_width - ( ((-x_offset) + width) /PIXEL_TO_GRID_SCALE)));
   }
 }
 
@@ -466,6 +485,13 @@ function mouseDragged()
 function draw()
 {
 	drawGrid();
+
+	var right_buffer = g_width - ( ((-x_offset) + width) /PIXEL_TO_GRID_SCALE);
+	if(right_buffer < NEW_GENERATION_BUFFER)
+	{
+		addColumns();
+		drawRockColumns(g_width - NEW_COLUMNS_TO_ADD, g_width);
+	}
 }
 
 var rockColWidthSlider = document.getElementById("rockColWidthRange");
