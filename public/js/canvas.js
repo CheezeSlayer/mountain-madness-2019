@@ -10,6 +10,7 @@ function setup() {
   cnv = createCanvas(800, 500);
   centerCanvas();
   background(220);
+  rect(10, 10, 200, 200);
 }
 
 function draw() {
